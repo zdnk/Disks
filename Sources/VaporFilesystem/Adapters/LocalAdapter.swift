@@ -1,7 +1,7 @@
 import Foundation
 import Vapor
 
-enum LocalFilesystemError: Error {
+public enum LocalFilesystemError: Error {
     case fileCreationFailed
     case fileUpdateFailed
     case fileNotFound
@@ -9,24 +9,24 @@ enum LocalFilesystemError: Error {
     case fileSizeNotAvailable
 }
 
-final class LocalAdapter: FilesystemAdapter {
+public final class LocalAdapter: FilesystemAdapter {
     
-    let fileManager: FileManager
-    let root: String
+    public let fileManager: FileManager
+    public let root: String
     
-    init(fileManager: FileManager = .default, root: String) {
+    public init(fileManager: FileManager = .default, root: String) {
         self.fileManager = fileManager
         self.root = root
     }
     
-    func has(file: String, on worker: Worker, options: FileOptions?) -> EventLoopFuture<Bool> {
+    public func has(file: String, on worker: Worker, options: FileOptions?) -> EventLoopFuture<Bool> {
         return worker.eventLoop.submit { () -> Bool in
             let path = Filesystem.applyPathPrefix(self.root, to: file)
             return self.fileManager.fileExists(atPath: path)
         }
     }
     
-    func read(file: String, on worker: Worker, options: FileOptions?) -> EventLoopFuture<Data> {
+    public func read(file: String, on worker: Worker, options: FileOptions?) -> EventLoopFuture<Data> {
         return worker.eventLoop.submit { () -> Data in
             let path = Filesystem.applyPathPrefix(self.root, to: file)
             guard let data = self.fileManager.contents(atPath: path) else {
@@ -37,12 +37,12 @@ final class LocalAdapter: FilesystemAdapter {
         }
     }
     
-    func listContents(of: String, recursive: Bool, on: Worker, options: FileOptions?) -> EventLoopFuture<[String]> {
+    public func listContents(of: String, recursive: Bool, on: Worker, options: FileOptions?) -> EventLoopFuture<[String]> {
         #warning("TODO: list contents support")
         fatalError("Not supported.")
     }
     
-    func metadata(of file: String, on worker: Worker, options: FileOptions?) -> EventLoopFuture<FileMetadata> {
+    public func metadata(of file: String, on worker: Worker, options: FileOptions?) -> EventLoopFuture<FileMetadata> {
         return worker.eventLoop.submit { () -> [FileAttributeKey: Any] in
             let path = Filesystem.applyPathPrefix(self.root, to: file)
             return try self.fileManager.attributesOfItem(atPath: path)
@@ -68,7 +68,7 @@ final class LocalAdapter: FilesystemAdapter {
             }
     }
     
-    func size(of file: String, on worker: Worker, options: FileOptions?) -> EventLoopFuture<Int> {
+    public func size(of file: String, on worker: Worker, options: FileOptions?) -> EventLoopFuture<Int> {
         return metadata(of: file, on: worker, options: nil)
             .map { meta in
                 guard let size = meta[.size] as? Int else {
@@ -79,11 +79,11 @@ final class LocalAdapter: FilesystemAdapter {
         }
     }
     
-    func mimetype(of: String, on: Worker, options: FileOptions?) -> EventLoopFuture<String> {
+    public func mimetype(of: String, on: Worker, options: FileOptions?) -> EventLoopFuture<String> {
         fatalError("Not supported.")
     }
     
-    func timestamp(of file: String, on worker: Worker, options: FileOptions?) -> EventLoopFuture<Date> {
+    public func timestamp(of file: String, on worker: Worker, options: FileOptions?) -> EventLoopFuture<Date> {
         return metadata(of: file, on: worker, options: nil)
             .map { meta in
                 guard let date = meta[.modificationDate] as? Date else {
@@ -94,11 +94,11 @@ final class LocalAdapter: FilesystemAdapter {
             }
     }
     
-    func visibility(of: String, on: Worker, options: FileOptions?) -> EventLoopFuture<FileVisibility> {
+    public func visibility(of: String, on: Worker, options: FileOptions?) -> EventLoopFuture<FileVisibility> {
         fatalError("Unsupported")
     }
     
-    func write(data: Data, to file: String, on worker: Worker, options: FileOptions?) -> EventLoopFuture<()> {
+    public func write(data: Data, to file: String, on worker: Worker, options: FileOptions?) -> EventLoopFuture<()> {
         return worker.eventLoop.submit {
             let path = Filesystem.applyPathPrefix(self.root, to: file)
             guard self.fileManager.createFile(atPath: path, contents: data, attributes: nil) else {
@@ -107,7 +107,7 @@ final class LocalAdapter: FilesystemAdapter {
         }
     }
     
-    func update(data: Data, to file: String, on worker: Worker, options: FileOptions?) -> EventLoopFuture<()> {
+    public func update(data: Data, to file: String, on worker: Worker, options: FileOptions?) -> EventLoopFuture<()> {
         return worker.eventLoop.submit {
             let path = Filesystem.applyPathPrefix(self.root, to: file)
             try self.fileManager.removeItem(atPath: path)
@@ -117,7 +117,7 @@ final class LocalAdapter: FilesystemAdapter {
         }
     }
     
-    func rename(file: String, to newFile: String, on worker: Worker, options: FileOptions?) -> EventLoopFuture<()> {
+    public func rename(file: String, to newFile: String, on worker: Worker, options: FileOptions?) -> EventLoopFuture<()> {
         return worker.eventLoop.submit {
             let path = Filesystem.applyPathPrefix(self.root, to: file)
             let newPath = Filesystem.applyPathPrefix(self.root, to: newFile)
@@ -125,7 +125,7 @@ final class LocalAdapter: FilesystemAdapter {
         }
     }
     
-    func copy(file: String, to newFile: String, on worker: Worker, options: FileOptions?) -> EventLoopFuture<()> {
+    public func copy(file: String, to newFile: String, on worker: Worker, options: FileOptions?) -> EventLoopFuture<()> {
         return worker.eventLoop.submit {
             let path = Filesystem.applyPathPrefix(self.root, to: file)
             let newPath = Filesystem.applyPathPrefix(self.root, to: newFile)
@@ -133,28 +133,28 @@ final class LocalAdapter: FilesystemAdapter {
         }
     }
     
-    func delete(file: String, on worker: Worker, options: FileOptions?) -> EventLoopFuture<()> {
+    public func delete(file: String, on worker: Worker, options: FileOptions?) -> EventLoopFuture<()> {
         return worker.eventLoop.submit {
             let path = Filesystem.applyPathPrefix(self.root, to: file)
             try self.fileManager.removeItem(atPath: path)
         }
     }
     
-    func delete(directory: String, on worker: Worker, options: FileOptions?) -> EventLoopFuture<()> {
+    public func delete(directory: String, on worker: Worker, options: FileOptions?) -> EventLoopFuture<()> {
         return worker.eventLoop.submit {
             let path = Filesystem.applyPathPrefix(self.root, to: directory)
             try self.fileManager.removeItem(atPath: path)
         }
     }
     
-    func create(directory: String, on worker: Worker, options: FileOptions?) -> EventLoopFuture<()> {
+    public func create(directory: String, on worker: Worker, options: FileOptions?) -> EventLoopFuture<()> {
         return worker.eventLoop.submit {
             let path = Filesystem.applyPathPrefix(self.root, to: directory)
             try self.fileManager.createDirectory(atPath: path, withIntermediateDirectories: true, attributes: nil)
         }
     }
     
-    func setVisibility(of: String, to: FileVisibility, on: Worker, options: FileOptions?) -> EventLoopFuture<()> {
+    public func setVisibility(of: String, to: FileVisibility, on: Worker, options: FileOptions?) -> EventLoopFuture<()> {
         #warning("TODO: what is visibility actually?")
         fatalError("Unsupported.")
     }

@@ -1,9 +1,9 @@
 import Foundation
 import Vapor
 
-protocol FileOverrideSupporting { }
+public protocol FileOverrideSupporting { }
 
-protocol FilesystemAdapter {
+public protocol FilesystemAdapter {
     
     func has(file: String, on: Worker, options: FileOptions?) -> Future<Bool>
     func read(file: String, on: Worker, options: FileOptions?) -> Future<Data>

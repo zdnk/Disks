@@ -1,19 +1,19 @@
 import Foundation
 
-struct FileMetadataKey: Hashable {
+public struct FileMetadataKey: Hashable {
     
-    let identifier: String
+    public let identifier: String
     
-    init(_ identifier: String) {
+    public init(_ identifier: String) {
         self.identifier = identifier
     }
     
 }
 
-extension FileMetadataKey {
+public extension FileMetadataKey {
     
-    static var creationDate = FileMetadataKey(identifier: "FileCreationDate")
-    static var modificationDate = FileMetadataKey(identifier: "FileModificationDate")
-    static var size = FileMetadataKey(identifier: "FileSize")
+    public static var creationDate = FileMetadataKey("FileCreationDate")
+    public static var modificationDate = FileMetadataKey("FileModificationDate")
+    public static var size = FileMetadataKey("FileSize")
     
 }

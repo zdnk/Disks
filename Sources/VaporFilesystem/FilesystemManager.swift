@@ -1,14 +1,14 @@
 import Foundation
 import Vapor
 
-class FilesystemManager: Filesystem {
+public class FilesystemManager: Filesystem {
     
-    let disks: [DiskIdentifier: FilesystemAdapter]
-    let `default`: DiskIdentifier
+    public let disks: [DiskIdentifier: FilesystemAdapter]
+    public let `default`: DiskIdentifier
     
-    let worker: Worker
+    public let worker: Worker
     
-    init(disks: [DiskIdentifier: FilesystemAdapter], default: DiskIdentifier, on worker: Worker) throws {
+    public init(disks: [DiskIdentifier: FilesystemAdapter], default: DiskIdentifier, on worker: Worker) throws {
         self.disks = disks
         self.default = `default`
         self.worker = worker
@@ -22,7 +22,7 @@ class FilesystemManager: Filesystem {
 
 extension FilesystemManager: FilesystemManaging {
     
-    func use(_ id: DiskIdentifier) throws -> FilesystemType {
+    public func use(_ id: DiskIdentifier) throws -> FilesystemType {
         #warning("TODO: throw error if it is not present")
         let adapter = disks[id]!
         return Filesystem(adapter: adapter)
