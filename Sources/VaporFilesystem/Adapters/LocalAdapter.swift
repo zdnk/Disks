@@ -25,21 +25,18 @@ public final class LocalAdapter: FilesystemAdapter {
     }
     
     public func has(file: String, on worker: Worker, options: FileOptions?) -> EventLoopFuture<Bool> {
-        return worker.eventLoop.submit { () -> Bool in
-            let path = self.applyPathPrefix(to: file)
-            return self.fileManager.fileExists(atPath: path)
-        }
+        let path = self.applyPathPrefix(to: file)
+        let exists = self.fileManager.fileExists(atPath: path)
+        return worker.eventLoop.newSucceededFuture(result: exists)
     }
     
     public func read(file: String, on worker: Worker, options: FileOptions?) -> EventLoopFuture<Data> {
-        return worker.eventLoop.submit { () -> Data in
-            let path = self.applyPathPrefix(to: file)
-            guard let data = self.fileManager.contents(atPath: path) else {
-                throw LocalFilesystemError.fileNotFound
-            }
-            
-            return data
+        let path = self.applyPathPrefix(to: file)
+        guard let data = self.fileManager.contents(atPath: path) else {
+            return worker.eventLoop.newFailedFuture(error: LocalFilesystemError.fileNotFound)
         }
+        
+        return worker.eventLoop.newSucceededFuture(result: data)
     }
     
     public func listContents(of: String, recursive: Bool, on: Worker, options: FileOptions?) -> EventLoopFuture<[String]> {
@@ -48,29 +45,30 @@ public final class LocalAdapter: FilesystemAdapter {
     }
     
     public func metadata(of file: String, on worker: Worker, options: FileOptions?) -> EventLoopFuture<FileMetadata> {
-        return worker.eventLoop.submit { () -> [FileAttributeKey: Any] in
+        do {
             let path = self.applyPathPrefix(to: file)
-            return try self.fileManager.attributesOfItem(atPath: path)
-            }.map { attributes -> FileMetadata in
-                var meta: FileMetadata = [:]
-                
-                for (key, value) in attributes {
-                    switch key {
-                    case .creationDate:
-                        meta[.creationDate] = value
-                        
-                    case .modificationDate:
-                        meta[.modificationDate] = value
-                        
-                    case .size:
-                        meta[.size] = value as? Int
+            let attributes = try self.fileManager.attributesOfItem(atPath: path)
+            var meta: FileMetadata = [:]
+        
+            for (key, value) in attributes {
+                switch key {
+                case .creationDate:
+                    meta[.creationDate] = value
                     
-                    default: break
-                    }
-                }
+                case .modificationDate:
+                    meta[.modificationDate] = value
+                    
+                case .size:
+                    meta[.size] = value as? Int
                 
-                return meta
+                default: break
+                }
             }
+        
+            return worker.eventLoop.newSucceededFuture(result: meta)
+        } catch {
+            return worker.eventLoop.newFailedFuture(error: error)
+        }
     }
     
     public func size(of file: String, on worker: Worker, options: FileOptions?) -> EventLoopFuture<Int> {
@@ -104,16 +102,16 @@ public final class LocalAdapter: FilesystemAdapter {
 //    }
     
     public func write(data: Data, to file: String, on worker: Worker, options: FileOptions?) -> EventLoopFuture<()> {
-        return worker.eventLoop.submit {
-            let path = self.applyPathPrefix(to: file)
-            guard self.fileManager.createFile(atPath: path, contents: data, attributes: nil) else {
-                throw LocalFilesystemError.fileCreationFailed
-            }
+        let path = self.applyPathPrefix(to: file)
+        guard self.fileManager.createFile(atPath: path, contents: data, attributes: nil) else {
+            return worker.eventLoop.newFailedFuture(error: LocalFilesystemError.fileCreationFailed)
         }
+        
+        return worker.eventLoop.newSucceededFuture(result: ())
     }
     
     public func update(data: Data, to file: String, on worker: Worker, options: FileOptions?) -> EventLoopFuture<()> {
-        return worker.eventLoop.submit {
+        do {
             let path = self.applyPathPrefix(to: file)
             let fileURL = URL(fileURLWithPath: path)
             
@@ -135,46 +133,64 @@ public final class LocalAdapter: FilesystemAdapter {
             
             // Remove temp file
             try self.fileManager.removeItem(at: tempURL)
+            return worker.eventLoop.newSucceededFuture(result: ())
+        } catch {
+            return worker.eventLoop.newFailedFuture(error: error)
         }
     }
     
     public func rename(file: String, to newName: String, on worker: Worker, options: FileOptions?) -> EventLoopFuture<()> {
-        return worker.eventLoop.submit {
+        do {
             let path = self.applyPathPrefix(to: file)
             let fileURL = URL(fileURLWithPath: path)
             let dir = fileURL.deletingLastPathComponent()
             let newURL = dir.appendingPathComponent(newName, isDirectory: false)
             let newPath = newURL.absoluteString
             try self.fileManager.moveItem(atPath: path, toPath: newPath)
+            return worker.eventLoop.newSucceededFuture(result: ())
+        } catch {
+            return worker.eventLoop.newFailedFuture(error: error)
         }
     }
     
     public func copy(file: String, to newFile: String, on worker: Worker, options: FileOptions?) -> EventLoopFuture<()> {
-        return worker.eventLoop.submit {
+        do {
             let path = self.applyPathPrefix(to: file)
             let newPath = self.applyPathPrefix(to: file)
             try self.fileManager.copyItem(atPath: path, toPath: newPath)
+            return worker.eventLoop.newSucceededFuture(result: ())
+        } catch {
+            return worker.eventLoop.newFailedFuture(error: error)
         }
     }
     
     public func delete(file: String, on worker: Worker, options: FileOptions?) -> EventLoopFuture<()> {
-        return worker.eventLoop.submit {
+        do {
             let path = self.applyPathPrefix(to: file)
             try self.fileManager.removeItem(atPath: path)
+            return worker.eventLoop.newSucceededFuture(result: ())
+        } catch {
+            return worker.eventLoop.newFailedFuture(error: error)
         }
     }
     
     public func delete(directory: String, on worker: Worker, options: FileOptions?) -> EventLoopFuture<()> {
-        return worker.eventLoop.submit {
+        do {
             let path = self.applyPathPrefix(to: directory)
             try self.fileManager.removeItem(atPath: path)
+            return worker.eventLoop.newSucceededFuture(result: ())
+        } catch {
+            return worker.eventLoop.newFailedFuture(error: error)
         }
     }
     
     public func create(directory: String, on worker: Worker, options: FileOptions?) -> EventLoopFuture<()> {
-        return worker.eventLoop.submit {
+        do {
             let path = self.applyPathPrefix(to: directory)
             try self.fileManager.createDirectory(atPath: path, withIntermediateDirectories: true, attributes: nil)
+            return worker.eventLoop.newSucceededFuture(result: ())
+        } catch {
+            return worker.eventLoop.newFailedFuture(error: error)
         }
     }
     

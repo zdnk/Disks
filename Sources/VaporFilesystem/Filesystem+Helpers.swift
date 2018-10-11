@@ -31,8 +31,11 @@ extension Filesystem {
     }
     
     public class func normalize(path: String, on worker: Worker) -> Future<String> {
-        return worker.eventLoop.submit { () -> String in
-            return try self.normalize(path: path)
+        do {
+            let result = try self.normalize(path: path)
+            return worker.eventLoop.newSucceededFuture(result: result)
+        } catch {
+            return worker.eventLoop.newFailedFuture(error: error)
         }
     }
     
