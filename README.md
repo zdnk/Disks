@@ -17,12 +17,15 @@ Abstraction of file storage for Vapor 3. Simple interface to interact and manipu
 
 ## Adapters
 
-### Official
+### Core
 - Local filesystem
+- Null
+
+### Officially supported
 - AWS S3 (coming soon)
 
-### Community
-Create your own!
+### Community supported
+Create PR and add yours!
 
 ## License
 The MIT License (MIT)
