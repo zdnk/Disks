@@ -4,6 +4,7 @@ import XCTest
 public func allTests() -> [XCTestCaseEntry] {
     return [
         testCase(VaporFilesystemTests.allTests),
+        testCase(FilesystemManagerTests.allTests),
     ]
 }
 #endif
