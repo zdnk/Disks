@@ -103,7 +103,10 @@ public final class LocalAdapter: FilesystemAdapter {
             let path = self.applyPathPrefix(to: file)
             let fileURL = URL(fileURLWithPath: path)
             
-            #warning("TODO: check if file exists")
+            // Check if file exists
+            guard try has(file: file, on: worker, options: options).wait() else {
+                throw FilesystemError.fileNotFound(path)
+            }
             
             // Saving to temp file
             let tempUUID = UUID().uuidString
