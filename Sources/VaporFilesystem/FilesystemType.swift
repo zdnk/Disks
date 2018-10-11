@@ -10,6 +10,8 @@ public typealias FileMetadata = [FileMetadataKey: Any]
 
 public protocol FilesystemType {
     
+    var adapter: FilesystemAdapter { get }
+    
     func has(file: String, options: FileOptions?) -> Future<Bool>
     func read(file: String, options: FileOptions?) -> Future<Data>
     func listContents(of: String, recursive: Bool, options: FileOptions?) -> Future<[String]>

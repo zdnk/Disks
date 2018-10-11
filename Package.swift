@@ -20,7 +20,10 @@ let package = Package(
         ),
         .testTarget(
             name: "VaporFilesystemTests",
-            dependencies: ["VaporFilesystem"]
+            dependencies: [
+                "VaporFilesystem",
+                "Vapor",
+            ]
         ),
     ]
 )
