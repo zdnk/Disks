@@ -99,9 +99,9 @@ public final class LocalAdapter: FilesystemAdapter {
             }
     }
     
-    public func visibility(of: String, on: Worker, options: FileOptions?) -> EventLoopFuture<FileVisibility> {
-        fatalError("Unsupported")
-    }
+//    public func visibility(of: String, on: Worker, options: FileOptions?) -> EventLoopFuture<FileVisibility> {
+//        fatalError("Unsupported")
+//    }
     
     public func write(data: Data, to file: String, on worker: Worker, options: FileOptions?) -> EventLoopFuture<()> {
         return worker.eventLoop.submit {
@@ -178,9 +178,9 @@ public final class LocalAdapter: FilesystemAdapter {
         }
     }
     
-    public func setVisibility(of: String, to: FileVisibility, on: Worker, options: FileOptions?) -> EventLoopFuture<()> {
-        #warning("TODO: what is visibility actually?")
-        fatalError("Unsupported.")
-    }
+//    public func setVisibility(of: String, to: FileVisibility, on: Worker, options: FileOptions?) -> EventLoopFuture<()> {
+//        #warning("TODO: what is visibility actually?")
+//        fatalError("Unsupported.")
+//    }
     
 }

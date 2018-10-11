@@ -71,12 +71,12 @@ public extension Filesystem {
             }
     }
     
-    public func visibility(of file: String, on worker: Worker, options: FileOptions?) -> Future<FileVisibility> {
-        return Filesystem.normalize(path: file, on: worker)
-            .flatMap { path in
-                self.adapter.visibility(of: path, on: worker, options: options)
-            }
-    }
+//    public func visibility(of file: String, on worker: Worker, options: FileOptions?) -> Future<FileVisibility> {
+//        return Filesystem.normalize(path: file, on: worker)
+//            .flatMap { path in
+//                self.adapter.visibility(of: path, on: worker, options: options)
+//            }
+//    }
     
 }
 
@@ -158,11 +158,11 @@ public extension Filesystem {
             }
     }
     
-    public func setVisibility(of file: String, to visibility: FileVisibility, on worker: Worker, options: FileOptions?) -> Future<()> {
-        return Filesystem.normalize(path: file, on: worker)
-            .flatMap { path in
-                self.adapter.setVisibility(of: path, to: visibility, on: worker, options: options)
-            }
-    }
+//    public func setVisibility(of file: String, to visibility: FileVisibility, on worker: Worker, options: FileOptions?) -> Future<()> {
+//        return Filesystem.normalize(path: file, on: worker)
+//            .flatMap { path in
+//                self.adapter.setVisibility(of: path, to: visibility, on: worker, options: options)
+//            }
+//    }
     
 }

@@ -12,7 +12,7 @@ public protocol FilesystemAdapter {
     func size(of: String, on: Worker, options: FileOptions?) -> Future<Int>
     func mimetype(of: String, on: Worker, options: FileOptions?) -> Future<String>
     func timestamp(of: String, on: Worker, options: FileOptions?) -> Future<Date>
-    func visibility(of: String, on: Worker, options: FileOptions?) -> Future<FileVisibility>
+//    func visibility(of: String, on: Worker, options: FileOptions?) -> Future<FileVisibility>
     func write(data: Data, to: String, on: Worker, options: FileOptions?) -> Future<()>
     func update(data: Data, to: String, on: Worker, options: FileOptions?) -> Future<()>
     func rename(file: String, to: String, on: Worker, options: FileOptions?) -> Future<()>
@@ -20,6 +20,6 @@ public protocol FilesystemAdapter {
     func delete(file: String, on: Worker, options: FileOptions?) -> Future<()>
     func delete(directory: String, on: Worker, options: FileOptions?) -> Future<()>
     func create(directory: String, on: Worker, options: FileOptions?) -> Future<()>
-    func setVisibility(of: String, to: FileVisibility, on: Worker, options: FileOptions?) -> Future<()>
+//    func setVisibility(of: String, to: FileVisibility, on: Worker, options: FileOptions?) -> Future<()>
     
 }
