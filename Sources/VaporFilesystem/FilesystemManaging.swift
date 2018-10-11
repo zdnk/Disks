@@ -1,10 +1,16 @@
 import Foundation
 
-struct DiskIdentifier: Hashable {
-    let identifier: String
+public struct DiskIdentifier: Hashable {
+    
+    public let identifier: String
+    
+    public init(_ identifier: String) {
+        self.identifier = identifier
+    }
+    
 }
 
-protocol FilesystemManaging: FilesystemType {
+public protocol FilesystemManaging: FilesystemType {
     
     var disks: [DiskIdentifier: FilesystemAdapter] { get }
     

@@ -1,14 +1,14 @@
 import Foundation
 import Vapor
 
-enum FileVisibility {
+public enum FileVisibility {
     case `public`
     case `private`
 }
 
-typealias FileMetadata = [FileMetadataKey: Any]
+public typealias FileMetadata = [FileMetadataKey: Any]
 
-protocol FilesystemType {
+public protocol FilesystemType {
     
     func has(file: String, on: Worker, options: FileOptions?) -> Future<Bool>
     func read(file: String, on: Worker, options: FileOptions?) -> Future<Data>

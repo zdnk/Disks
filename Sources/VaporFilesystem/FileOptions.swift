@@ -1,32 +1,32 @@
 import Foundation
 
-struct FileOptionKey: Hashable {
+public struct FileOptionKey: Hashable {
     
-    let identifier: String
+    public let identifier: String
     
-    init(_ identifier: String) {
+    public init(_ identifier: String) {
         self.identifier = identifier
     }
     
 }
 
-struct FileOptions {
+public struct FileOptions {
     
-    private(set) var storage: [FileOptionKey: Any] = [:]
+    public private(set) var storage: [FileOptionKey: Any] = [:]
     
-    var keys: [FileOptionKey] {
+    public var keys: [FileOptionKey] {
         return Array(storage.keys)
     }
     
-    func has(_ key: FileOptionKey) -> Bool {
+    public func has(_ key: FileOptionKey) -> Bool {
         return self.storage.keys.contains(key)
     }
     
-    mutating func set(key: FileOptionKey, to value: Any?) {
+    public mutating func set(key: FileOptionKey, to value: Any?) {
         self.storage[key] = value
     }
     
-    func get<T>(_ key: FileOptionKey) throws -> T? {
+    public func get<T>(_ key: FileOptionKey) throws -> T? {
         guard let object = self.storage[key] else {
             return nil
         }
@@ -40,7 +40,7 @@ struct FileOptions {
         return typed
     }
     
-    func get<T>(_ key: FileOptionKey, as: T.Type) throws -> T? {
+    public func get<T>(_ key: FileOptionKey, as: T.Type) throws -> T? {
         let typed: T? = try get(key)
         return typed
     }
