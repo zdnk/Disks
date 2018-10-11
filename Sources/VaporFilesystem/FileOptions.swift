@@ -12,6 +12,10 @@ public struct FileOptionKey: Hashable {
 
 public struct FileOptions {
     
+    public enum Error: Swift.Error {
+        case castError(from: Any, to: Any)
+    }
+    
     public private(set) var storage: [FileOptionKey: Any] = [:]
     
     public var keys: [FileOptionKey] {
@@ -33,8 +37,7 @@ public struct FileOptions {
         
         guard let typed = object as? T else {
             let actualType = type(of: object)
-            #warning("TODO: Throw error")
-            return nil
+            throw Error.castError(from: actualType, to: T.self)
         }
         
         return typed

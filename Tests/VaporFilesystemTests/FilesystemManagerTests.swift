@@ -11,13 +11,11 @@ final class FilesystemManagerTests: XCTestCase {
     ]
     
     func testUse() throws {
-        let worker = EmbeddedEventLoop()
-        
         let local = LocalAdapter(root: "./")
         let manager = try FilesystemManager(
             disks: [.potatoes: DummyAdapter(), .images: local],
             default: .images,
-            on: worker
+            on: EmbeddedEventLoop()
         )
         
         XCTAssertNoThrow(try manager.use(.images))
@@ -27,7 +25,6 @@ final class FilesystemManagerTests: XCTestCase {
     }
     
     func testDefault() throws {
-        
         let local = LocalAdapter(root: "./")
         let dummy = DummyAdapter()
         let manager = try FilesystemManager(
