@@ -117,10 +117,12 @@ public final class LocalAdapter: FilesystemAdapter {
         }
     }
     
-    public func rename(file: String, to newFile: String, on worker: Worker, options: FileOptions?) -> EventLoopFuture<()> {
+    public func rename(file: String, to newName: String, on worker: Worker, options: FileOptions?) -> EventLoopFuture<()> {
         return worker.eventLoop.submit {
             let path = Filesystem.applyPathPrefix(self.root, to: file)
-            let newPath = Filesystem.applyPathPrefix(self.root, to: newFile)
+            let dir = URL(string: path)!.deletingLastPathComponent()
+            let newURL = dir.appendingPathComponent(newName, isDirectory: false)
+            let newPath = newURL.absoluteString
             try self.fileManager.moveItem(atPath: path, toPath: newPath)
         }
     }
