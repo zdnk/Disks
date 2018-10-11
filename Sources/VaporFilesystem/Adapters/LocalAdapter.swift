@@ -1,14 +1,6 @@
 import Foundation
 import Vapor
 
-public enum LocalFilesystemError: Error {
-    case fileCreationFailed
-    case fileUpdateFailed
-    case fileNotFound
-    case timestampNotAvailable
-    case fileSizeNotAvailable
-}
-
 public final class LocalAdapter: FilesystemAdapter {
     
     public let fileManager: FileManager
@@ -33,7 +25,7 @@ public final class LocalAdapter: FilesystemAdapter {
     public func read(file: String, on worker: Worker, options: FileOptions?) -> EventLoopFuture<Data> {
         let path = self.applyPathPrefix(to: file)
         guard let data = self.fileManager.contents(atPath: path) else {
-            return worker.eventLoop.newFailedFuture(error: LocalFilesystemError.fileNotFound)
+            return worker.eventLoop.newFailedFuture(error: FilesystemError.fileNotFound(path))
         }
         
         return worker.eventLoop.newSucceededFuture(result: data)
@@ -75,7 +67,7 @@ public final class LocalAdapter: FilesystemAdapter {
         return metadata(of: file, on: worker, options: nil)
             .map { meta in
                 guard let size = meta[.size] as? Int else {
-                    throw LocalFilesystemError.fileSizeNotAvailable
+                    throw FilesystemError.fileSizeNotAvailable
                 }
                 
                 return size
@@ -90,21 +82,17 @@ public final class LocalAdapter: FilesystemAdapter {
         return metadata(of: file, on: worker, options: nil)
             .map { meta in
                 guard let date = meta[.modificationDate] as? Date else {
-                    throw LocalFilesystemError.timestampNotAvailable
+                    throw FilesystemError.timestampNotAvailable
                 }
                 
                 return date
             }
     }
     
-//    public func visibility(of: String, on: Worker, options: FileOptions?) -> EventLoopFuture<FileVisibility> {
-//        fatalError("Unsupported")
-//    }
-    
     public func write(data: Data, to file: String, on worker: Worker, options: FileOptions?) -> EventLoopFuture<()> {
         let path = self.applyPathPrefix(to: file)
         guard self.fileManager.createFile(atPath: path, contents: data, attributes: nil) else {
-            return worker.eventLoop.newFailedFuture(error: LocalFilesystemError.fileCreationFailed)
+            return worker.eventLoop.newFailedFuture(error: FilesystemError.creationFailed)
         }
         
         return worker.eventLoop.newSucceededFuture(result: ())
@@ -193,10 +181,5 @@ public final class LocalAdapter: FilesystemAdapter {
             return worker.eventLoop.newFailedFuture(error: error)
         }
     }
-    
-//    public func setVisibility(of: String, to: FileVisibility, on: Worker, options: FileOptions?) -> EventLoopFuture<()> {
-//        #warning("TODO: what is visibility actually?")
-//        fatalError("Unsupported.")
-//    }
     
 }

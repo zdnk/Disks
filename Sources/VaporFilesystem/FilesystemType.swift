@@ -1,10 +1,6 @@
 import Foundation
 import Vapor
 
-public enum FileVisibility {
-    case `public`
-    case `private`
-}
 
 public typealias FileMetadata = [FileMetadataKey: Any]
 
@@ -19,7 +15,6 @@ public protocol FilesystemType {
     func size(of: String, options: FileOptions?) -> Future<Int>
     func mimetype(of: String, options: FileOptions?) -> Future<String>
     func timestamp(of: String, options: FileOptions?) -> Future<Date>
-//    func visibility(of: String, options: FileOptions?) -> Future<FileVisibility>
     func write(data: Data, to: String, options: FileOptions?) -> Future<()>
 //    func write(file: String, to: String) -> Future<()>
     func update(data: Data, to: String, options: FileOptions?) -> Future<()>
@@ -31,7 +26,6 @@ public protocol FilesystemType {
     func delete(file: String, options: FileOptions?) -> Future<()>
     func delete(directory: String, options: FileOptions?) -> Future<()>
     func create(directory: String, options: FileOptions?) -> Future<()>
-//    func setVisibility(of: String, to: FileVisibility, options: FileOptions?) -> Future<()>
     
 }
 

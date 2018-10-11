@@ -3,15 +3,23 @@ import Vapor
 
 public class FilesystemManager: Filesystem {
     
+    public enum Error: Swift.Error {
+        case defaultNotInDisks
+        case diskNotRegistered(DiskIdentifier)
+    }
+    
     public let disks: [DiskIdentifier: FilesystemAdapter]
     public let `default`: DiskIdentifier
     
-    public init(disks: [DiskIdentifier: FilesystemAdapter], default: DiskIdentifier, on worker: Worker) throws {
+    public init(disks: [DiskIdentifier: FilesystemAdapter], default theDefault: DiskIdentifier, on worker: Worker) throws {
         self.disks = disks
-        self.default = `default`
+        self.default = theDefault
         
-        #warning("TODO: throw error if it is not present")
-        let defaultAdapter = disks[`default`]!
+        guard disks.keys.contains(theDefault) else {
+            throw Error.defaultNotInDisks
+        }
+        
+        let defaultAdapter = disks[theDefault]!
         super.init(adapter: defaultAdapter, on: worker)
     }
     
@@ -20,8 +28,10 @@ public class FilesystemManager: Filesystem {
 extension FilesystemManager: FilesystemManaging {
     
     public func use(_ id: DiskIdentifier) throws -> FilesystemType {
-        #warning("TODO: throw error if it is not present")
-        let adapter = disks[id]!
+        guard let adapter = disks[id] else {
+            throw Error.diskNotRegistered(id)
+        }
+        
         return Filesystem(adapter: adapter, on: worker)
     }
     
