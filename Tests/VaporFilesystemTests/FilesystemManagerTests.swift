@@ -36,8 +36,9 @@ final class FilesystemManagerTests: XCTestCase {
             on: EmbeddedEventLoop()
         )
 
-        try manager.has(file: "irelevant").wait()
+        let result = try manager.has(file: "irelevant").wait()
         XCTAssertTrue(dummy.calledHas)
+        XCTAssertFalse(result)
     }
     
 }
