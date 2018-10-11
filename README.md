@@ -13,7 +13,7 @@ Abstraction of file storage for Vapor 3. Simple interface to interact and manipu
 - [ ] Link generation
 - [x] Vapor 3 compatible
 - [ ] Works as Vapor caching driver
-- [ ] Strams support for big files
+- [ ] Streams support for big files
 - [ ] 100% test coverage
 
 ## Adapters
