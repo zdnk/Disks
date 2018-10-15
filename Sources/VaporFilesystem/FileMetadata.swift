@@ -17,3 +17,9 @@ public extension FileMetadataKey {
     public static var size = FileMetadataKey("FileSize")
     
 }
+
+public struct FileMetadata: KeyValueStoring {
+    
+    public var storage: [FileMetadataKey: Any] = [:]
+    
+}

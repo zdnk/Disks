@@ -1,9 +1,6 @@
 import Foundation
 import Vapor
 
-
-public typealias FileMetadata = [FileMetadataKey: Any]
-
 public protocol FilesystemType {
     
     var adapter: FilesystemAdapter { get }

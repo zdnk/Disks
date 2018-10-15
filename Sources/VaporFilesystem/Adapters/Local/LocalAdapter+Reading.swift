@@ -25,18 +25,18 @@ extension LocalAdapter: FilesystemReading {
         return run(on: worker) {
             let path = self.applyPathPrefix(to: file)
             let attributes = try self.fileManager.attributesOfItem(atPath: path)
-            var meta: FileMetadata = [:]
+            var meta: FileMetadata = FileMetadata()
             
             for (key, value) in attributes {
                 switch key {
                 case .creationDate:
-                    meta[.creationDate] = value
+                    meta.set(key: .creationDate, to: value)
                     
                 case .modificationDate:
-                    meta[.modificationDate] = value
+                    meta.set(key: .modificationDate, to: value)
                     
                 case .size:
-                    meta[.size] = value as? Int
+                    meta.set(key: .size, to: value as? Int)
                     
                 default: break
                 }
@@ -49,7 +49,7 @@ extension LocalAdapter: FilesystemReading {
     public func size(of file: String, on worker: Container, options: FileOptions?) -> EventLoopFuture<Int> {
         return metadata(of: file, on: worker, options: nil)
             .map { meta in
-                guard let size = meta[.size] as? Int else {
+                guard let size = try meta.get(.size, as: Int.self) else {
                     throw FilesystemError.fileSizeNotAvailable
                 }
                 
@@ -60,7 +60,7 @@ extension LocalAdapter: FilesystemReading {
     public func timestamp(of file: String, on worker: Container, options: FileOptions?) -> EventLoopFuture<Date> {
         return metadata(of: file, on: worker, options: nil)
             .map { meta in
-                guard let date = meta[.modificationDate] as? Date else {
+                guard let date = try meta.get(.modificationDate, as: Date.self) else {
                     throw FilesystemError.timestampNotAvailable
                 }
                 
