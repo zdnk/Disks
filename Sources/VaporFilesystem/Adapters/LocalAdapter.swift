@@ -1,7 +1,7 @@
 import Foundation
 import Vapor
 
-public final class LocalAdapter: FilesystemAdapter {
+open class LocalAdapter: FilesystemAdapter {
     
     public let fileManager: FileManager
     public let root: String
@@ -89,7 +89,7 @@ public final class LocalAdapter: FilesystemAdapter {
             }
     }
     
-    public func write(data: Data, to file: String, on worker: Container, options: FileOptions?) -> EventLoopFuture<()> {
+    open func write(data: Data, to file: String, on worker: Container, options: FileOptions?) -> EventLoopFuture<()> {
         let path = self.applyPathPrefix(to: file)
         guard self.fileManager.createFile(atPath: path, contents: data, attributes: nil) else {
             return worker.eventLoop.newFailedFuture(error: FilesystemError.creationFailed)
@@ -98,7 +98,7 @@ public final class LocalAdapter: FilesystemAdapter {
         return worker.eventLoop.newSucceededFuture(result: ())
     }
     
-    public func update(data: Data, to file: String, on worker: Container, options: FileOptions?) -> EventLoopFuture<()> {
+    open func update(data: Data, to file: String, on worker: Container, options: FileOptions?) -> EventLoopFuture<()> {
         do {
             let path = self.applyPathPrefix(to: file)
             let fileURL = URL(fileURLWithPath: path)
@@ -130,7 +130,7 @@ public final class LocalAdapter: FilesystemAdapter {
         }
     }
     
-    public func rename(file: String, to newName: String, on worker: Container, options: FileOptions?) -> EventLoopFuture<()> {
+    open func rename(file: String, to newName: String, on worker: Container, options: FileOptions?) -> EventLoopFuture<()> {
         do {
             let path = self.applyPathPrefix(to: file)
             let fileURL = URL(fileURLWithPath: path)
@@ -144,7 +144,7 @@ public final class LocalAdapter: FilesystemAdapter {
         }
     }
     
-    public func copy(file: String, to newFile: String, on worker: Container, options: FileOptions?) -> EventLoopFuture<()> {
+    open func copy(file: String, to newFile: String, on worker: Container, options: FileOptions?) -> EventLoopFuture<()> {
         do {
             let path = self.applyPathPrefix(to: file)
             let newPath = self.applyPathPrefix(to: file)
@@ -155,7 +155,7 @@ public final class LocalAdapter: FilesystemAdapter {
         }
     }
     
-    public func delete(file: String, on worker: Container, options: FileOptions?) -> EventLoopFuture<()> {
+    open func delete(file: String, on worker: Container, options: FileOptions?) -> EventLoopFuture<()> {
         do {
             let path = self.applyPathPrefix(to: file)
             try self.fileManager.removeItem(atPath: path)
@@ -165,7 +165,7 @@ public final class LocalAdapter: FilesystemAdapter {
         }
     }
     
-    public func delete(directory: String, on worker: Container, options: FileOptions?) -> EventLoopFuture<()> {
+    open func delete(directory: String, on worker: Container, options: FileOptions?) -> EventLoopFuture<()> {
         do {
             let path = self.applyPathPrefix(to: directory)
             try self.fileManager.removeItem(atPath: path)
@@ -175,7 +175,7 @@ public final class LocalAdapter: FilesystemAdapter {
         }
     }
     
-    public func create(directory: String, on worker: Container, options: FileOptions?) -> EventLoopFuture<()> {
+    open func create(directory: String, on worker: Container, options: FileOptions?) -> EventLoopFuture<()> {
         do {
             let path = self.applyPathPrefix(to: directory)
             try self.fileManager.createDirectory(atPath: path, withIntermediateDirectories: true, attributes: nil)

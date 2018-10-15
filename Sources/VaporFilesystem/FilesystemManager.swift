@@ -1,7 +1,7 @@
 import Foundation
 import Vapor
 
-public class FilesystemManager: Filesystem {
+open class FilesystemManager: Filesystem {
     
     public enum Error: Swift.Error {
         case defaultNotInDisks
@@ -27,7 +27,7 @@ public class FilesystemManager: Filesystem {
 
 extension FilesystemManager: FilesystemManaging {
     
-    public func use(_ id: DiskIdentifier) throws -> FilesystemType {
+    open func use(_ id: DiskIdentifier) throws -> FilesystemType {
         guard let adapter = disks[id] else {
             throw Error.diskNotRegistered(id)
         }

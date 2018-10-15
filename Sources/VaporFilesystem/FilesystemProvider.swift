@@ -1,7 +1,7 @@
 import Foundation
 import Vapor
 
-public final class FilesystemProvider: Provider {
+open class FilesystemProvider: Provider {
     
     public let disks: [DiskIdentifier: FilesystemAdapter]
     public let defaultDisk: DiskIdentifier
@@ -11,7 +11,7 @@ public final class FilesystemProvider: Provider {
         self.defaultDisk = `default`
     }
     
-    public func register(_ services: inout Services) throws {
+    open func register(_ services: inout Services) throws {
         services.register([FilesystemType.self, FilesystemManaging.self]) { container in
             return try FilesystemManager(
                 disks: self.disks,
@@ -21,7 +21,7 @@ public final class FilesystemProvider: Provider {
         }
     }
     
-    public func didBoot(_ container: Container) throws -> EventLoopFuture<Void> {
+    open func didBoot(_ container: Container) throws -> EventLoopFuture<Void> {
         return .done(on: container)
     }
     

@@ -1,7 +1,7 @@
 import Foundation
 import Vapor
 
-public class Filesystem: FilesystemType {
+open class Filesystem: FilesystemType {
     
     public let adapter: FilesystemAdapter
     public let worker: Container
