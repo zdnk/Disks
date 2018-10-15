@@ -4,22 +4,25 @@ import Vapor
 extension LocalAdapter: FilesystemReading {
     
     public func has(file: String, on worker: Container, options: FileOptions?) -> EventLoopFuture<Bool> {
-        let path = self.applyPathPrefix(to: file)
-        let exists = self.fileManager.fileExists(atPath: path)
-        return worker.eventLoop.newSucceededFuture(result: exists)
+        return run(on: worker) {
+            let path = self.applyPathPrefix(to: file)
+            return self.fileManager.fileExists(atPath: path)
+        }
     }
     
     public func read(file: String, on worker: Container, options: FileOptions?) -> EventLoopFuture<Data> {
-        let path = self.applyPathPrefix(to: file)
-        guard let data = self.fileManager.contents(atPath: path) else {
-            return worker.eventLoop.newFailedFuture(error: FilesystemError.fileNotFound(path))
+        return run(on: worker) {
+            let path = self.applyPathPrefix(to: file)
+            guard let data = self.fileManager.contents(atPath: path) else {
+               throw FilesystemError.fileNotFound(path)
+            }
+            
+            return data
         }
-        
-        return worker.eventLoop.newSucceededFuture(result: data)
     }
     
     public func metadata(of file: String, on worker: Container, options: FileOptions?) -> EventLoopFuture<FileMetadata> {
-        do {
+        return run(on: worker) {
             let path = self.applyPathPrefix(to: file)
             let attributes = try self.fileManager.attributesOfItem(atPath: path)
             var meta: FileMetadata = [:]
@@ -39,9 +42,7 @@ extension LocalAdapter: FilesystemReading {
                 }
             }
             
-            return worker.eventLoop.newSucceededFuture(result: meta)
-        } catch {
-            return worker.eventLoop.newFailedFuture(error: error)
+            return meta
         }
     }
     
