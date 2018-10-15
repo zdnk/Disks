@@ -3,6 +3,7 @@ import Foundation
 public enum FilesystemError: Swift.Error {
     
     case fileNotFound(String)
+    case directoryNotFound(String)
     case creationFailed
     
     case timestampNotAvailable
