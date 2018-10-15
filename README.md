@@ -9,6 +9,7 @@ Abstraction of file storage for Vapor 3. Simple interface to interact and manipu
 - [x] Local filesystem integration
 - [x] Cloud services integrations
 - [x] Mutiple filesystems in single application, mixed adapters
+- [x] Non-blocking
 - [ ] Directory emulation in systems that don't support directories
 - [ ] Link generation
 - [x] Vapor 3 compatible
