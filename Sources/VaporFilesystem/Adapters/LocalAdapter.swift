@@ -16,13 +16,13 @@ public final class LocalAdapter: FilesystemAdapter {
         return URL(fileURLWithPath: prefixed).absoluteString
     }
     
-    public func has(file: String, on worker: Worker, options: FileOptions?) -> EventLoopFuture<Bool> {
+    public func has(file: String, on worker: Container, options: FileOptions?) -> EventLoopFuture<Bool> {
         let path = self.applyPathPrefix(to: file)
         let exists = self.fileManager.fileExists(atPath: path)
         return worker.eventLoop.newSucceededFuture(result: exists)
     }
     
-    public func read(file: String, on worker: Worker, options: FileOptions?) -> EventLoopFuture<Data> {
+    public func read(file: String, on worker: Container, options: FileOptions?) -> EventLoopFuture<Data> {
         let path = self.applyPathPrefix(to: file)
         guard let data = self.fileManager.contents(atPath: path) else {
             return worker.eventLoop.newFailedFuture(error: FilesystemError.fileNotFound(path))
@@ -31,12 +31,12 @@ public final class LocalAdapter: FilesystemAdapter {
         return worker.eventLoop.newSucceededFuture(result: data)
     }
     
-    public func listContents(of: String, recursive: Bool, on: Worker, options: FileOptions?) -> EventLoopFuture<[String]> {
+    public func listContents(of: String, recursive: Bool, on: Container, options: FileOptions?) -> EventLoopFuture<[String]> {
         #warning("TODO: list contents support")
         fatalError("Not supported.")
     }
     
-    public func metadata(of file: String, on worker: Worker, options: FileOptions?) -> EventLoopFuture<FileMetadata> {
+    public func metadata(of file: String, on worker: Container, options: FileOptions?) -> EventLoopFuture<FileMetadata> {
         do {
             let path = self.applyPathPrefix(to: file)
             let attributes = try self.fileManager.attributesOfItem(atPath: path)
@@ -63,7 +63,7 @@ public final class LocalAdapter: FilesystemAdapter {
         }
     }
     
-    public func size(of file: String, on worker: Worker, options: FileOptions?) -> EventLoopFuture<Int> {
+    public func size(of file: String, on worker: Container, options: FileOptions?) -> EventLoopFuture<Int> {
         return metadata(of: file, on: worker, options: nil)
             .map { meta in
                 guard let size = meta[.size] as? Int else {
@@ -74,11 +74,11 @@ public final class LocalAdapter: FilesystemAdapter {
         }
     }
     
-    public func mimetype(of: String, on: Worker, options: FileOptions?) -> EventLoopFuture<String> {
+    public func mimetype(of: String, on: Container, options: FileOptions?) -> EventLoopFuture<String> {
         fatalError("Not supported.")
     }
     
-    public func timestamp(of file: String, on worker: Worker, options: FileOptions?) -> EventLoopFuture<Date> {
+    public func timestamp(of file: String, on worker: Container, options: FileOptions?) -> EventLoopFuture<Date> {
         return metadata(of: file, on: worker, options: nil)
             .map { meta in
                 guard let date = meta[.modificationDate] as? Date else {
@@ -89,7 +89,7 @@ public final class LocalAdapter: FilesystemAdapter {
             }
     }
     
-    public func write(data: Data, to file: String, on worker: Worker, options: FileOptions?) -> EventLoopFuture<()> {
+    public func write(data: Data, to file: String, on worker: Container, options: FileOptions?) -> EventLoopFuture<()> {
         let path = self.applyPathPrefix(to: file)
         guard self.fileManager.createFile(atPath: path, contents: data, attributes: nil) else {
             return worker.eventLoop.newFailedFuture(error: FilesystemError.creationFailed)
@@ -98,7 +98,7 @@ public final class LocalAdapter: FilesystemAdapter {
         return worker.eventLoop.newSucceededFuture(result: ())
     }
     
-    public func update(data: Data, to file: String, on worker: Worker, options: FileOptions?) -> EventLoopFuture<()> {
+    public func update(data: Data, to file: String, on worker: Container, options: FileOptions?) -> EventLoopFuture<()> {
         do {
             let path = self.applyPathPrefix(to: file)
             let fileURL = URL(fileURLWithPath: path)
@@ -130,7 +130,7 @@ public final class LocalAdapter: FilesystemAdapter {
         }
     }
     
-    public func rename(file: String, to newName: String, on worker: Worker, options: FileOptions?) -> EventLoopFuture<()> {
+    public func rename(file: String, to newName: String, on worker: Container, options: FileOptions?) -> EventLoopFuture<()> {
         do {
             let path = self.applyPathPrefix(to: file)
             let fileURL = URL(fileURLWithPath: path)
@@ -144,7 +144,7 @@ public final class LocalAdapter: FilesystemAdapter {
         }
     }
     
-    public func copy(file: String, to newFile: String, on worker: Worker, options: FileOptions?) -> EventLoopFuture<()> {
+    public func copy(file: String, to newFile: String, on worker: Container, options: FileOptions?) -> EventLoopFuture<()> {
         do {
             let path = self.applyPathPrefix(to: file)
             let newPath = self.applyPathPrefix(to: file)
@@ -155,7 +155,7 @@ public final class LocalAdapter: FilesystemAdapter {
         }
     }
     
-    public func delete(file: String, on worker: Worker, options: FileOptions?) -> EventLoopFuture<()> {
+    public func delete(file: String, on worker: Container, options: FileOptions?) -> EventLoopFuture<()> {
         do {
             let path = self.applyPathPrefix(to: file)
             try self.fileManager.removeItem(atPath: path)
@@ -165,7 +165,7 @@ public final class LocalAdapter: FilesystemAdapter {
         }
     }
     
-    public func delete(directory: String, on worker: Worker, options: FileOptions?) -> EventLoopFuture<()> {
+    public func delete(directory: String, on worker: Container, options: FileOptions?) -> EventLoopFuture<()> {
         do {
             let path = self.applyPathPrefix(to: directory)
             try self.fileManager.removeItem(atPath: path)
@@ -175,7 +175,7 @@ public final class LocalAdapter: FilesystemAdapter {
         }
     }
     
-    public func create(directory: String, on worker: Worker, options: FileOptions?) -> EventLoopFuture<()> {
+    public func create(directory: String, on worker: Container, options: FileOptions?) -> EventLoopFuture<()> {
         do {
             let path = self.applyPathPrefix(to: directory)
             try self.fileManager.createDirectory(atPath: path, withIntermediateDirectories: true, attributes: nil)

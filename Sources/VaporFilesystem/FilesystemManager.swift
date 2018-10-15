@@ -11,7 +11,7 @@ public class FilesystemManager: Filesystem {
     public let disks: [DiskIdentifier: FilesystemAdapter]
     public let `default`: DiskIdentifier
     
-    public init(disks: [DiskIdentifier: FilesystemAdapter], default theDefault: DiskIdentifier, on worker: Worker) throws {
+    public init(disks: [DiskIdentifier: FilesystemAdapter], default theDefault: DiskIdentifier, on worker: Container) throws {
         self.disks = disks
         self.default = theDefault
         

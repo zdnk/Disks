@@ -30,7 +30,7 @@ extension Filesystem {
         return parts.joined(separator: "/")
     }
     
-    public class func normalize(path: String, on worker: Worker) -> Future<String> {
+    public class func normalize(path: String, on worker: Container) -> Future<String> {
         do {
             let result = try self.normalize(path: path)
             return worker.eventLoop.newSucceededFuture(result: result)

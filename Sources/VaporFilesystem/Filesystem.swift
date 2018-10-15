@@ -4,9 +4,9 @@ import Vapor
 public class Filesystem: FilesystemType {
     
     public let adapter: FilesystemAdapter
-    public let worker: Worker
+    public let worker: Container
     
-    public init(adapter: FilesystemAdapter, on worker: Worker) {
+    public init(adapter: FilesystemAdapter, on worker: Container) {
         self.adapter = adapter
         self.worker = worker
     }
