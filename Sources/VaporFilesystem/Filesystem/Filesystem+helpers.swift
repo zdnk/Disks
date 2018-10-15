@@ -3,7 +3,7 @@ import Vapor
 
 extension Filesystem {
     
-    open class func normalize(path: String) throws -> String {
+    public func normalize(path: String) throws -> String {
         var normalized = path.replacingOccurrences(of: "\\", with: "/")
         normalized = normalized.trimmingCharacters(in: .whitespacesAndNewlines)
         
@@ -30,16 +30,16 @@ extension Filesystem {
         return parts.joined(separator: "/")
     }
     
-    open class func normalize(path: String, on worker: Container) -> Future<String> {
+    public func normalize(path: String, on worker: Container) -> Future<String> {
         do {
-            let result = try self.normalize(path: path)
+            let result = try normalize(path: path)
             return worker.eventLoop.newSucceededFuture(result: result)
         } catch {
             return worker.eventLoop.newFailedFuture(error: error)
         }
     }
     
-    open class func applyPathPrefix(_ prefix: String, to path: String) -> String {
+    public class func applyPathPrefix(_ prefix: String, to path: String) -> String {
         guard let prefixed = URL(string: path, relativeTo: URL(string: prefix)) else {
             fatalError("Cannot create prefixed URL")
         }
