@@ -5,14 +5,14 @@ extension LocalAdapter: FilesystemReading {
     
     public func has(file: String, on worker: Container, options: FileOptions?) -> EventLoopFuture<Bool> {
         return run(on: worker) {
-            let path = self.applyPathPrefix(to: file)
+            let path = self.absolutePath(to: file)
             return self.fileManager.fileExists(atPath: path)
         }
     }
     
     public func read(file: String, on worker: Container, options: FileOptions?) -> EventLoopFuture<Data> {
         return run(on: worker) {
-            let path = self.applyPathPrefix(to: file)
+            let path = self.absolutePath(to: file)
             guard let data = self.fileManager.contents(atPath: path) else {
                throw FilesystemError.fileNotFound(path)
             }
@@ -23,7 +23,7 @@ extension LocalAdapter: FilesystemReading {
     
     public func metadata(of file: String, on worker: Container, options: FileOptions?) -> EventLoopFuture<FileMetadata> {
         return run(on: worker) {
-            let path = self.applyPathPrefix(to: file)
+            let path = self.absolutePath(to: file)
             let attributes = try self.fileManager.attributesOfItem(atPath: path)
             var meta: FileMetadata = FileMetadata()
             

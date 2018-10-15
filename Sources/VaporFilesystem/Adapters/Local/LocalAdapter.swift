@@ -7,7 +7,6 @@ open class LocalAdapter {
     public let root: String
     public let queue: DispatchQueue
     
-    
     public init(fileManager: FileManager = .default, root: String, queue: DispatchQueue? = nil) {
         self.fileManager = fileManager
         self.root = root
@@ -20,7 +19,7 @@ open class LocalAdapter {
         )
     }
     
-    public func applyPathPrefix(to path: String) -> String {
+    public func absolutePath(to path: String) -> String {
         let prefixed = Filesystem.applyPathPrefix(self.root, to: path)
         return URL(fileURLWithPath: prefixed).absoluteString
     }
