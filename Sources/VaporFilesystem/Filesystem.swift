@@ -31,9 +31,15 @@ public extension Filesystem {
     }
     
     public func listContents(of directory: String, recursive: Bool, options: FileOptions?) -> Future<[String]> {
+        guard let adapter = self.adapter as? FilesystemContentListing else {
+            return worker.eventLoop.newFailedFuture(
+                error: FilesystemError.listingUnsupported(by: self.adapter)
+            )
+        }
+        
         return Filesystem.normalize(path: directory, on: worker)
             .flatMap { path in
-                self.adapter.listContents(of: path, recursive: recursive, on: self.worker, options: options)
+                adapter.listContents(of: path, recursive: recursive, on: self.worker, options: options)
             }
     }
     
@@ -48,13 +54,6 @@ public extension Filesystem {
         return Filesystem.normalize(path: file, on: worker)
             .flatMap { path in
                 self.adapter.size(of: path, on: self.worker, options: options)
-            }
-    }
-    
-    public func mimetype(of file: String, options: FileOptions?) -> Future<String> {
-        return Filesystem.normalize(path: file, on: worker)
-            .flatMap { path in
-                self.adapter.mimetype(of: path, on: self.worker, options: options)
             }
     }
     
@@ -91,7 +90,7 @@ public extension Filesystem {
                     .and(result: path)
             }.flatMap { (exists, path) in
                 if exists {
-                    if self.adapter is FileOverrideSupporting {
+                    if self.adapter is FileOverwriteSupporting {
                         return self.adapter.update(data: data, to: path, on: self.worker, options: options)
                     }
                     

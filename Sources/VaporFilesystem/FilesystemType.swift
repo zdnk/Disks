@@ -13,7 +13,6 @@ public protocol FilesystemType {
     func listContents(of: String, recursive: Bool, options: FileOptions?) -> Future<[String]>
     func metadata(of: String, options: FileOptions?) -> Future<FileMetadata>
     func size(of: String, options: FileOptions?) -> Future<Int>
-    func mimetype(of: String, options: FileOptions?) -> Future<String>
     func timestamp(of: String, options: FileOptions?) -> Future<Date>
     func write(data: Data, to: String, options: FileOptions?) -> Future<()>
 //    func write(file: String, to: String) -> Future<()>
@@ -49,10 +48,6 @@ extension FilesystemType {
     
     func size(of: String) -> Future<Int> {
         return size(of: of, options: nil)
-    }
-    
-    func mimetype(of: String) -> Future<String> {
-        return mimetype(of: of, options: nil)
     }
     
     func timestamp(of: String) -> Future<Date> {

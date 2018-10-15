@@ -72,10 +72,6 @@ fileprivate class DummyAdapter: FilesystemAdapter {
         fatalError()
     }
     
-    func mimetype(of: String, on: Container, options: FileOptions?) -> EventLoopFuture<String> {
-        fatalError()
-    }
-    
     func timestamp(of: String, on: Container, options: FileOptions?) -> EventLoopFuture<Date> {
         fatalError()
     }
