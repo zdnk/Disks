@@ -19,7 +19,7 @@ final class S3AdapterTests: XCTestCase {
         let container = createContainer()
         
         try useTestFile("read_test1.txt") {
-            let data = try adapter.read(file: "read_test.txt", on: container, options: nil).wait()
+            let data = try adapter.read(file: "read_test1.txt", on: container, options: nil).wait()
             XCTAssertEqual(data.count, testFileSize)
         }
     }
