@@ -14,61 +14,55 @@ final class S3AdapterTests: XCTestCase {
         ("testDeleteIntegration", testDeleteIntegration),
     ]
     
-    func testReadIntegration() throws {
-        let adapter = try createAdapter()
-        let container = createContainer()
+    var container: Container!
+    var adapter: S3Adapter!
+    
+    override func setUp() {
+        self.container = createContainer()
+        self.adapter = try! createAdapter()
         
-        try useTestFile("read_test1.txt") {
+        super.setUp()
+    }
+    
+    func testReadIntegration() throws {
+        useTestFile("read_test1.txt") {
             let data = try adapter.read(file: "read_test1.txt", on: container, options: nil).wait()
             XCTAssertEqual(data.count, testFileSize)
         }
     }
     
     func testSizeIntegration() throws {
-        let adapter = try createAdapter()
-        let container = createContainer()
-        
-        try useTestFile("size_test.txt") {
+        useTestFile("size_test.txt") {
             let size = try adapter.size(of: "size_test.txt", on: container, options: nil).wait()
             XCTAssertEqual(size, testFileSize)
         }
     }
     
     func testPositiveHasIntegration() throws {
-        let adapter = try createAdapter()
-        let container = createContainer()
-        
-        try useTestFile("positive_has_test.txt") {
+        useTestFile("positive_has_test.txt") {
             let has = try adapter.has(file: "positive_has_test.txt", on: container, options: nil).wait()
             XCTAssertTrue(has)
         }
     }
     
     func testNegativeHasIntegration() throws {
-        let adapter = try createAdapter()
-        let container = createContainer()
-        
         let has = try adapter.has(file: "some/fake/file.png", on: container, options: nil).wait()
         XCTAssertFalse(has)
     }
     
     func testWriteIntegration() throws {
-        let adapter = try createAdapter()
-        let container = createContainer()
         let file = "write_test.txt"
         
-        try useTestFile(file) {
+        useTestFile(file) {
             let hasAfter = try adapter.has(file: file, on: container, options: nil).wait()
             XCTAssertTrue(hasAfter)
         }
     }
     
     func testDeleteIntegration() throws {
-        let adapter = try createAdapter()
-        let container = createContainer()
         let file = "delete_test.txt"
         
-        try useTestFile(file) {
+        useTestFile(file) {
             try adapter.delete(file: file, on: container, options: nil).wait()
             let has = try adapter.has(file: file, on: container, options: nil).wait()
             XCTAssertFalse(has)
@@ -99,46 +93,37 @@ fileprivate extension S3AdapterTests {
     }
     
     fileprivate func writeTestFile(_ path: String) throws {
-        let adapter = try createAdapter()
-        let container = createContainer()
-        
         try adapter.write(data: testFileData, to: path, on: container, options: nil).wait()
     }
     
     fileprivate func deleteTestFile(_ path: String) throws {
-        let adapter = try createAdapter()
-        let container = createContainer()
-        
         let has = try adapter.has(file: path, on: container, options: nil).wait()
         if has {
             try adapter.delete(file: path, on: container, options: nil).wait()
         }
     }
     
-    fileprivate func useTestFile(_ path: String, _ closure: () throws -> ()) throws {
+    fileprivate func useTestFile(_ path: String, _ closure: () throws -> ()) {
         try? deleteTestFile(path)
         
         do {
             try writeTestFile(path)
         }
         catch {
-            try deleteTestFile(path)
+            try? deleteTestFile(path)
             XCTFail("Failed preparing file \(path): \(error)")
-            throw error
         }
         
         do {
             try closure()
         } catch {
-            XCTFail("Failed: \(error)")
-            throw error
+            XCTFail("Failed on \(path): \(error)")
         }
         
         do {
             try deleteTestFile(path)
         } catch {
             XCTFail("Failed removing file \(path): \(error)")
-            throw error
         }
     }
     
