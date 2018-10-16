@@ -21,7 +21,7 @@ extension LocalAdapter: FilesystemWriting {
             
             // Check if file exists
             guard try self.has(file: file, on: worker, options: options).wait() else {
-                throw FilesystemError.fileNotFound(path)
+                throw FilesystemError.notFound
             }
             
             // Saving to temp file

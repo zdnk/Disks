@@ -14,7 +14,7 @@ extension LocalAdapter: FilesystemReading {
         return run(on: worker) {
             let path = self.absolutePath(to: file)
             guard let data = self.fileManager.contents(atPath: path) else {
-               throw FilesystemError.fileNotFound(path)
+               throw FilesystemError.notFound
             }
             
             return data

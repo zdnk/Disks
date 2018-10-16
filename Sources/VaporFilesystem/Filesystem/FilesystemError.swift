@@ -2,8 +2,10 @@ import Foundation
 
 public enum FilesystemError: Swift.Error {
     
-    case fileNotFound(String)
-    case directoryNotFound(String)
+    case notFound
+    case alreadyExists
+    case unresolvableMediaType
+    
     case creationFailed
     
     case timestampNotAvailable

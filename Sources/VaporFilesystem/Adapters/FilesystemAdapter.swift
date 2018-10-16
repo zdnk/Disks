@@ -43,26 +43,24 @@ extension FilesystemReading {
         return file.split(separator: ".").last.map(String.init)
     }
     
-    public func mediaType(of file: String) -> MediaType? {
+    public func mediaType(of file: String) throws -> MediaType {
         guard let ext = self.ext(of: file) else {
-            return nil
-        }
-        
-        return MediaType.fileExtension(ext)
-    }
-    
-    public func mediaType(of file: String, on worker: Container, options: FileOptions?) -> Future<MediaType> {
-        guard let ext = file.split(separator: ".").last.map(String.init) else {
-            #warning("FIXME: proper error")
-            return worker.eventLoop.newFailedFuture(error: FilesystemError.creationFailed)
+            throw FilesystemError.unresolvableMediaType
         }
         
         guard let mediaType = MediaType.fileExtension(ext) else {
-            #warning("FIXME: proper error")
-            return worker.eventLoop.newFailedFuture(error: FilesystemError.creationFailed)
+            throw FilesystemError.unresolvableMediaType
         }
         
-        return worker.eventLoop.newSucceededFuture(result: mediaType)
+        return mediaType
+    }
+    
+    public func mediaType(of file: String, on worker: Container, options: FileOptions?) -> Future<MediaType> {
+        do {
+            return worker.eventLoop.newSucceededFuture(result: try self.mediaType(of: file))
+        } catch {
+            return worker.eventLoop.newFailedFuture(error: error)
+        }
     }
     
 }

@@ -27,50 +27,28 @@ open class S3Adapter {
         )
     }
     
-    internal func run<F>(file: String, on worker: Container, _ block: (LocationConvertible) throws -> Future<F>) -> Future<F> {
+    internal func run<F>(path: String, on worker: Container, _ block: (LocationConvertible) throws -> Future<F>) -> Future<F> {
         do {
-            return try block(fileLocation(for: file))
+            return try block(fileLocation(for: path))
                 .catchMap { (error) -> F in
-                    throw self.map(error: error, file: file)
+                    throw self.map(error: error, path: path)
                 }
         } catch {
             return worker.eventLoop.newFailedFuture(error: error)
         }
     }
     
-    internal func run<F>(directory: String, on worker: Container, _ block: () throws -> Future<F>) -> Future<F> {
-        do {
-            return try block()
-                .catchMap { (error) -> F in
-                    throw self.map(error: error, directory: directory)
-            }
-        } catch {
-            return worker.eventLoop.newFailedFuture(error: error)
-        }
-    }
-    
-    internal func map(error: Error, file: String) -> Error {
+    internal func map(error: Error, path: String) -> Error {
         guard case S3.Error.badResponse(let response) = error else {
             return error
         }
         
         if response.http.status == .notFound {
-            return FilesystemError.fileNotFound(file)
+            return FilesystemError.notFound
         }
         
         return error
     }
-    
-    internal func map(error: Error, directory: String) -> Error {
-        guard case S3.Error.badResponse(let response) = error else {
-            return error
-        }
-        
-        if response.http.status == .notFound {
-            return FilesystemError.directoryNotFound(directory)
-        }
-        
-        return error
-    }
+
     
 }

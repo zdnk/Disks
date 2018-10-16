@@ -4,12 +4,7 @@ import Vapor
 extension S3Adapter: FilesystemWriting {
     
     public func write(data: Data, to: String, on worker: Container, options: FileOptions?) -> EventLoopFuture<()> {
-        return run(file: to, on: worker) {
-            guard let mediaType = self.mediaType(of: to) else {
-                #warning("FIXME: proper error")
-                return worker.eventLoop.newFailedFuture(error: FilesystemError.creationFailed)
-            }
-            
+        return run(path: to, on: worker) {
             #warning("FIXME: access")
             #warning("FIXME: Region is not passed anywhere to upload!")
             let upload = File.Upload(
@@ -17,14 +12,13 @@ extension S3Adapter: FilesystemWriting {
                 bucket: $0.bucket,
                 destination: $0.path,
                 access: .privateAccess,
-                mime: mediaType.description
+                mime: try self.mediaType(of: to).description
             )
             
             return self.has(file: to, on: worker, options: options)
                 .flatMap { has -> Future<()> in
                     guard !has else {
-                        #warning("FIXME: Use proper error")
-                        throw FilesystemError.creationFailed
+                        throw FilesystemError.alreadyExists
                     }
                     
                     return try self.client.put(file: upload, on: worker)
@@ -46,7 +40,7 @@ extension S3Adapter: FilesystemWriting {
     }
     
     public func delete(file: String, on worker: Container, options: FileOptions?) -> EventLoopFuture<()> {
-        return run(file: file, on: worker) {
+        return run(path: file, on: worker) {
             return try self.client.delete(file: $0, on: worker)
                 .transform(to: ())
         }
