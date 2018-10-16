@@ -1,6 +1,7 @@
 # Filesystem
 
-Abstraction of file storage for Vapor 3. Simple interface to interact and manipulate with files without caring about tha backing storage - local or cloud.
+File storage abstraction layer for Vapor 3. Simple interface to interact and manipulate with files without caring about tha backing storage - local or cloud.
+For tests, you can simply use local filesystem and for staging or production AWS S3 with different buckets. In both cases, you will leverage the same API and chaging the location is only a matter of configuration.
 
 ## Features
 
