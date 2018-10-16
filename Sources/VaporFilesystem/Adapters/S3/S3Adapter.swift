@@ -31,14 +31,18 @@ open class S3Adapter {
         do {
             return try block(fileLocation(for: path))
                 .catchMap { (error) -> F in
-                    throw self.map(error: error, path: path)
+                    if let s3Error = error as? S3.Error {
+                        throw self.map(error: s3Error, path: path)
+                    }
+                    
+                    throw error
                 }
         } catch {
             return worker.eventLoop.newFailedFuture(error: error)
         }
     }
     
-    internal func map(error: Error, path: String) -> Error {
+    private func map(error: S3.Error, path: String) -> Error {
         guard case S3.Error.badResponse(let response) = error else {
             return error
         }
