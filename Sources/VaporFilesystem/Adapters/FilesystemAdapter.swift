@@ -15,7 +15,10 @@ public protocol FilesystemReading {
     func read(file: String, on: Container, options: FileOptions?) -> Future<Data>
     func metadata(of: String, on: Container, options: FileOptions?) -> Future<FileMetadata>
     func size(of: String, on: Container, options: FileOptions?) -> Future<Int>
+    
+    #warning("FIXME: creationDate and modificationDate")
     func timestamp(of: String, on: Container, options: FileOptions?) -> Future<Date>
+    func mediaType(of: String, on: Container, options: FileOptions?) -> Future<MediaType>
     
 }
 
@@ -32,3 +35,34 @@ public protocol FilesystemWriting {
 }
 
 public typealias FilesystemAdapter = FilesystemReading & FilesystemWriting
+
+
+extension FilesystemReading {
+    
+    public func ext(of file: String) -> String? {
+        return file.split(separator: ".").last.map(String.init)
+    }
+    
+    public func mediaType(of file: String) -> MediaType? {
+        guard let ext = self.ext(of: file) else {
+            return nil
+        }
+        
+        return MediaType.fileExtension(ext)
+    }
+    
+    public func mediaType(of file: String, on worker: Container, options: FileOptions?) -> Future<MediaType> {
+        guard let ext = file.split(separator: ".").last.map(String.init) else {
+            #warning("FIXME: proper error")
+            return worker.eventLoop.newFailedFuture(error: FilesystemError.creationFailed)
+        }
+        
+        guard let mediaType = MediaType.fileExtension(ext) else {
+            #warning("FIXME: proper error")
+            return worker.eventLoop.newFailedFuture(error: FilesystemError.creationFailed)
+        }
+        
+        return worker.eventLoop.newSucceededFuture(result: mediaType)
+    }
+    
+}

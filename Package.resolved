@@ -65,6 +65,15 @@
         }
       },
       {
+        "package": "S3",
+        "repositoryURL": "https://github.com/LiveUI/S3.git",
+        "state": {
+          "branch": null,
+          "revision": "9a7e7aa5486396665a792eed6489499ef33c344b",
+          "version": "3.0.0-rc2"
+        }
+      },
+      {
         "package": "Service",
         "repositoryURL": "https://github.com/vapor/service.git",
         "state": {
@@ -146,12 +155,30 @@
         }
       },
       {
+        "package": "VaporTestTools",
+        "repositoryURL": "https://github.com/LiveUI/VaporTestTools.git",
+        "state": {
+          "branch": null,
+          "revision": "e07ce263257463f2f2af9e640f81eb95a72760e4",
+          "version": "0.1.5"
+        }
+      },
+      {
         "package": "WebSocket",
         "repositoryURL": "https://github.com/vapor/websocket.git",
         "state": {
           "branch": null,
           "revision": "149af03348f60ac8b84defdf277112d62fd8c704",
           "version": "1.0.2"
+        }
+      },
+      {
+        "package": "XMLCoding",
+        "repositoryURL": "https://github.com/LiveUI/XMLCoding.git",
+        "state": {
+          "branch": null,
+          "revision": "65d576be8093150c5e7fe5c41df1b608ea6e2c6b",
+          "version": "0.3.0"
         }
       }
     ]

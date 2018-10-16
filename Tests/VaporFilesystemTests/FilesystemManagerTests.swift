@@ -15,7 +15,7 @@ final class FilesystemManagerTests: XCTestCase {
         let manager = try FilesystemManager(
             disks: [.potatoes: DummyAdapter(), .images: local],
             default: .images,
-            on: container()
+            on: createContainer()
         )
         
         XCTAssertNoThrow(try manager.use(.images))
@@ -30,7 +30,7 @@ final class FilesystemManagerTests: XCTestCase {
         let manager = try FilesystemManager(
             disks: [.images: local, .potatoes: dummy],
             default: .potatoes,
-            on: container()
+            on: createContainer()
         )
 
         let result = try manager.has(file: "irelevant").wait()

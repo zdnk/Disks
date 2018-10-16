@@ -4,7 +4,7 @@ import Vapor
 
 extension XCTestCase {
     
-    func container() -> Container {
+    func createContainer() -> Container {
         return BasicContainer(
             config: Config.default(),
             environment: Environment.testing,
