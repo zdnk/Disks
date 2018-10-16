@@ -46,8 +46,8 @@ extension S3Adapter: FilesystemWriting {
         }
     }
     
-    public func delete(directory: String, on: Container, options: FileOptions?) -> EventLoopFuture<()> {
-        fatalError()
+    public func delete(directory: String, on worker: Container, options: FileOptions?) -> EventLoopFuture<()> {
+        fatalError("Not supported at the moment.")
     }
     
     public func create(directory: String, on: Container, options: FileOptions?) -> EventLoopFuture<()> {

@@ -69,6 +69,28 @@ final class S3AdapterTests: XCTestCase {
         }
     }
     
+//    func testDirectoryDeleteIntegration() throws {
+//        let files = [
+//            "delete_dir_test/file1.txt",
+//            "delete_dir_test/file2.txt"
+//        ]
+//
+//        try files.forEach(self.deleteTestFile)
+//        try files.forEach(self.writeTestFile)
+//
+//        try files.forEach { (file) in
+//            let result = try self.adapter.has(file: file, on: container, options: nil).wait()
+//            XCTAssertTrue(result)
+//        }
+//
+//        try adapter.delete(directory: "delete_dir_test/", on: container, options: nil).wait()
+//
+//        try files.forEach { (file) in
+//            let result = try self.adapter.has(file: file, on: container, options: nil).wait()
+//            XCTAssertFalse(result)
+//        }
+//    }
+    
 }
 
 fileprivate extension S3AdapterTests {
