@@ -12,6 +12,7 @@ final class S3AdapterTests: XCTestCase {
         ("testNegativeHasIntegration", testNegativeHasIntegration),
         ("testWriteIntegration", testWriteIntegration),
         ("testDeleteIntegration", testDeleteIntegration),
+        ("testCopyIntegration", testCopyIntegration)
     ]
     
     var container: Container!
@@ -66,6 +67,22 @@ final class S3AdapterTests: XCTestCase {
             try adapter.delete(file: file, on: container, options: nil).wait()
             let has = try adapter.has(file: file, on: container, options: nil).wait()
             XCTAssertFalse(has)
+        }
+    }
+    
+    func testCopyIntegration() throws {
+        let original = "copy_original_test.txt"
+        let destination = "copy_destiatio_test.txt"
+        
+        useTestFile(original) {
+            try adapter.copy(file: original, to: destination, on: container, options: nil).wait()
+            let hasDestination = try adapter.has(file: destination, on: container, options: nil).wait()
+            XCTAssertTrue(hasDestination)
+            
+            let hasOriginal = try adapter.has(file: original, on: container, options: nil).wait()
+            XCTAssertTrue(hasOriginal)
+            
+            try adapter.delete(file: destination, on: container, options: nil).wait()
         }
     }
     
