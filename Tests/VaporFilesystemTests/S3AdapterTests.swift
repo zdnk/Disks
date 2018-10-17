@@ -125,11 +125,11 @@ fileprivate extension S3AdapterTests {
             bucket: "com.zdnkt.vapor-filesystem.testing",
             config: S3Adapter.Config(
                 auth: S3Adapter.Auth(
-                    accessKey: "AKIAILEJQGW4TOLFRPWA",
-                    secretKey: "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"
+                    accessKey: Environment.get("S3_ACCESS_KEY")!,
+                    secretKey: Environment.get("S3_SECRET_KEY")!
                 ),
                 region: .euCentral1,
-                defaultAccess: .publicRead
+                defaultAccess: .privateAccess
             )
         )
     }
