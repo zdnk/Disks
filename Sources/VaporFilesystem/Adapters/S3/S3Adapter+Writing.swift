@@ -5,13 +5,13 @@ extension S3Adapter: FilesystemWriting {
     
     public func write(data: Data, to: String, on worker: Container, options: FileOptions?) -> EventLoopFuture<()> {
         return run(path: to, on: worker) {
-            #warning("FIXME: access")
+            #warning("FIXME: access overriding")
             #warning("FIXME: Region is not passed anywhere to upload!")
             let upload = File.Upload(
                 data: data,
                 bucket: $0.bucket,
                 destination: $0.path,
-                access: .privateAccess,
+                access: self.config.defaultAccess,
                 mime: try self.mediaType(of: to).description
             )
             

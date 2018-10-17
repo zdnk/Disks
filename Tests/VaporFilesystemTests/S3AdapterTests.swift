@@ -106,10 +106,13 @@ fileprivate extension S3AdapterTests {
     func createAdapter() throws -> S3Adapter {
         return try S3Adapter(
             bucket: "<your-bucket>",
-            config: S3Signer.Config(
-                accessKey: "<your-accessKey>",
-                secretKey: "<your-secretKey>",
-                region: .euCentral1 // your region
+            config: S3Adapter.Config(
+                auth: S3Adapter.Auth(
+                    accessKey: "<your-accessKey>",
+                    secretKey: "<your-secretKey>"
+                ),
+                region: .euCentral1,
+                defaultAccess: .publicRead
             )
         )
     }
