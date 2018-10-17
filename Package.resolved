@@ -66,11 +66,11 @@
       },
       {
         "package": "S3",
-        "repositoryURL": "https://github.com/LiveUI/S3.git",
+        "repositoryURL": "https://github.com/zdnk/S3.git",
         "state": {
-          "branch": null,
-          "revision": "9a7e7aa5486396665a792eed6489499ef33c344b",
-          "version": "3.0.0-rc2"
+          "branch": "s3-copy-file",
+          "revision": "451dc0328cf41b1c950d0dfb7a2b0de752c7cd17",
+          "version": null
         }
       },
       {

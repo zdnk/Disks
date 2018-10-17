@@ -1,7 +1,7 @@
 import Foundation
 import Vapor
 
-extension S3Adapter: FilesystemWriting {
+extension S3Adapter: FilesystemWriting, FileOverwriteSupporting {
     
     public func write(data: Data, to: String, on worker: Container, options: FileOptions?) -> EventLoopFuture<()> {
         return run(path: to, on: worker) {
@@ -27,16 +27,23 @@ extension S3Adapter: FilesystemWriting {
         }
     }
     
-    public func update(data: Data, to: String, on: Container, options: FileOptions?) -> EventLoopFuture<()> {
-        fatalError()
+    public func update(data: Data, to: String, on worker: Container, options: FileOptions?) -> EventLoopFuture<()> {
+        return run(path: to, on: worker) { _ in
+            fatalError()
+        }
     }
     
     public func rename(file: String, to: String, on: Container, options: FileOptions?) -> EventLoopFuture<()> {
         fatalError()
     }
     
-    public func copy(file: String, to: String, on: Container, options: FileOptions?) -> EventLoopFuture<()> {
-        fatalError()
+    public func copy(file: String, to: String, on worker: Container, options: FileOptions?) -> EventLoopFuture<()> {
+        return run(path: file, on: worker) { origin in
+            return run(path: to, on: worker) { destination in
+                return try self.client.copy(file: origin, to: destination, on: worker)
+                    .transform(to: ())
+            }
+        }
     }
     
     public func delete(file: String, on worker: Container, options: FileOptions?) -> EventLoopFuture<()> {
