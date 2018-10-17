@@ -12,9 +12,10 @@ public struct FileMetadataKey: Hashable {
 
 public extension FileMetadataKey {
     
-    public static var creationDate = FileMetadataKey("FileCreationDate")
-    public static var modificationDate = FileMetadataKey("FileModificationDate")
-    public static var size = FileMetadataKey("FileSize")
+    public static let created = FileMetadataKey("createdDate")
+    public static let modified = FileMetadataKey("modifiedDate")
+    public static let size = FileMetadataKey("size")
+    public static let mime = FileMetadataKey("mime")
     
 }
 
@@ -28,28 +29,37 @@ public extension FileMetadata {
     
     var creationDate: Date? {
         get {
-            return try! get(.creationDate, as: Date.self)
+            return getOrNil(.created, as: Date.self)
         }
         set {
-            set(key: .creationDate, to: newValue)
+            set(key: .created, to: newValue)
         }
     }
     
-    var modificationDate: Date? {
+    var modified: Date? {
         get {
-            return try! get(.modificationDate, as: Date.self)
+            return getOrNil(.modified, as: Date.self)
         }
         set {
-            set(key: .modificationDate, to: newValue)
+            set(key: .modified, to: newValue)
         }
     }
     
     var size: Int? {
         get {
-            return try! get(.size, as: Int.self)
+            return getOrNil(.size, as: Int.self)
         }
         set {
             set(key: .size, to: newValue)
+        }
+    }
+    
+    var mime: String? {
+        get {
+            return getOrNil(.mime, as: String.self)
+        }
+        set {
+            set(key: .mime, to: newValue)
         }
     }
     

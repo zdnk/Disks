@@ -54,4 +54,22 @@ extension KeyValueStoring {
         return typed
     }
     
+    public func getOrNil<T>(_ key: Key) -> T? {
+        do {
+            return try get(key)
+        } catch {
+            print(error)
+            return nil
+        }
+    }
+    
+    public func getOrNil<T>(_ key: Key, as: T.Type) -> T? {
+        do {
+            return try get(key, as: T.self)
+        } catch {
+            print(error)
+            return nil
+        }
+    }
+    
 }

@@ -30,10 +30,10 @@ extension LocalAdapter: FilesystemReading {
             for (key, value) in attributes {
                 switch key {
                 case .creationDate:
-                    meta.set(key: .creationDate, to: value)
+                    meta.set(key: .created, to: value)
                     
                 case .modificationDate:
-                    meta.set(key: .modificationDate, to: value)
+                    meta.set(key: .modified, to: value)
                     
                 case .size:
                     meta.set(key: .size, to: value as? Int)
@@ -60,7 +60,7 @@ extension LocalAdapter: FilesystemReading {
     public func timestamp(of file: String, on worker: Container, options: FileOptions?) -> EventLoopFuture<Date> {
         return metadata(of: file, on: worker, options: nil)
             .map { meta in
-                guard let date = try meta.get(.modificationDate, as: Date.self) else {
+                guard let date = meta.modified else {
                     throw FilesystemError.timestampNotAvailable
                 }
                 
