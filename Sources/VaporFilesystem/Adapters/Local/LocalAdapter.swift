@@ -7,6 +7,7 @@ open class LocalAdapter {
     public let root: String
     public let queue: DispatchQueue
     
+    #warning("TODO: Default attributes like file permissions etc.")
     public init(fileManager: FileManager = .default, root: String, queue: DispatchQueue? = nil) {
         self.fileManager = fileManager
         self.root = root
