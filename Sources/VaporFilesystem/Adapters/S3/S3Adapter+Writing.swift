@@ -5,7 +5,7 @@ extension S3Adapter: FilesystemWriting, FileOverwriteSupporting {
     
     public func write(data: Data, to: String, on worker: Container, options: FileOptions?) -> EventLoopFuture<()> {
         return run(path: to, on: worker) {
-            let upload = try self.fileUpload(data: data, to: $0)
+            let upload = try self.fileUpload(data: data, to: $0, options: options)
             
             return self.has(file: $0.path, on: worker, options: options)
                 .flatMap { has -> Future<()> in
@@ -21,7 +21,7 @@ extension S3Adapter: FilesystemWriting, FileOverwriteSupporting {
     
     public func update(data: Data, to: String, on worker: Container, options: FileOptions?) -> EventLoopFuture<()> {
         return run(path: to, on: worker) {
-            let upload = try self.fileUpload(data: data, to: $0)
+            let upload = try self.fileUpload(data: data, to: $0, options: options)
             
             return self.has(file: $0.path, on: worker, options: options)
                 .flatMap { has -> Future<()> in
