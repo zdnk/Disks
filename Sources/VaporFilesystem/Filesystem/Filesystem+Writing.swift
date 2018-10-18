@@ -39,7 +39,7 @@ public extension Filesystem {
         return normalize(path: file, on: worker)
             .and(normalize(path: newFile, on: worker))
             .flatMap { (path, newPath) in
-                self.adapter.rename(file: path, to: newPath, on: self.worker, options: options)
+                self.adapter.move(file: path, to: newPath, on: self.worker, options: options)
         }
     }
     

@@ -43,7 +43,7 @@ extension NullAdapter: FilesystemWriting {
         return worker.eventLoop.newFailedFuture(error: FilesystemError.notFound)
     }
     
-    public func rename(file: String, to: String, on worker: Container, options: FileOptions?) -> EventLoopFuture<()> {
+    public func move(file: String, to: String, on worker: Container, options: FileOptions?) -> EventLoopFuture<()> {
         return worker.eventLoop.newFailedFuture(error: FilesystemError.notFound)
     }
     

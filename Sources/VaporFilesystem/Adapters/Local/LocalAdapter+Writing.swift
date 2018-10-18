@@ -44,7 +44,7 @@ extension LocalAdapter: FilesystemWriting {
         }
     }
 
-    open func rename(file: String, to newName: String, on worker: Container, options: FileOptions?) -> EventLoopFuture<()> {
+    open func move(file: String, to newName: String, on worker: Container, options: FileOptions?) -> EventLoopFuture<()> {
         return run(on: worker) {
             let path = self.absolutePath(to: file)
             let fileURL = URL(fileURLWithPath: path)

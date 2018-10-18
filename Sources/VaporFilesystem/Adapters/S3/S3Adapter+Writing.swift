@@ -35,7 +35,7 @@ extension S3Adapter: FilesystemWriting, FileOverwriteSupporting {
         }
     }
     
-    public func rename(file: String, to: String, on: Container, options: FileOptions?) -> EventLoopFuture<()> {
+    public func move(file: String, to: String, on: Container, options: FileOptions?) -> EventLoopFuture<()> {
         fatalError("Not implemented.")
     }
     

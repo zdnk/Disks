@@ -84,7 +84,7 @@ fileprivate class DummyAdapter: FilesystemAdapter {
         fatalError()
     }
     
-    func rename(file: String, to: String, on: Container, options: FileOptions?) -> EventLoopFuture<()> {
+    func move(file: String, to: String, on: Container, options: FileOptions?) -> EventLoopFuture<()> {
         fatalError()
     }
     
