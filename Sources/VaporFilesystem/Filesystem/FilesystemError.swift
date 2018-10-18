@@ -5,6 +5,7 @@ public enum FilesystemError: Swift.Error {
     case notFound
     case alreadyExists
     case unresolvableMediaType
+    case invalidPath
     
     case creationFailed
     

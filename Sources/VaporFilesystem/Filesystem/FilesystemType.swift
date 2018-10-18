@@ -4,6 +4,7 @@ import Vapor
 public protocol FilesystemType {
     
     var adapter: FilesystemAdapter { get }
+    var worker: Container { get }
     
     func has(file: String, options: FileOptions?) -> Future<Bool>
     func read(file: String, options: FileOptions?) -> Future<Data>
@@ -17,7 +18,7 @@ public protocol FilesystemType {
 //    func update(file: String, to: String) -> Future<()>
     func put(data: Data, to: String, options: FileOptions?) -> Future<()>
 //    func put(file: String, to: String) -> Future<()>
-    func rename(file: String, to: String, options: FileOptions?) -> Future<()>
+    func move(file: String, to: String, options: FileOptions?) -> Future<()>
     func copy(file: String, to: String, options: FileOptions?) -> Future<()>
     func delete(file: String, options: FileOptions?) -> Future<()>
     func delete(directory: String, options: FileOptions?) -> Future<()>
@@ -26,6 +27,21 @@ public protocol FilesystemType {
 }
 
 extension FilesystemType {
+    
+    func rename(file: String, to: String, options: FileOptions?) -> Future<()> {
+        guard var path = URL(string: file) else {
+            return worker.eventLoop.newFailedFuture(error: FilesystemError.invalidPath)
+        }
+        
+        path.deleteLastPathComponent()
+        path.appendPathComponent(to)
+        
+        return self.move(file: file, to: path.absoluteString, options: options)
+    }
+    
+    func rename(file: String, to: String) -> Future<()> {
+        return rename(file: file, to: to, options: nil)
+    }
     
     func has(file: String) -> Future<Bool> {
         return has(file: file, options: nil)
@@ -63,8 +79,8 @@ extension FilesystemType {
         return put(data: data, to: to, options: nil)
     }
     
-    func rename(file: String, to: String) -> Future<()> {
-        return rename(file: file, to: to, options: nil)
+    func move(file: String, to: String) -> Future<()> {
+        return move(file: file, to: to, options: nil)
     }
     
     func copy(file: String, to: String) -> Future<()> {

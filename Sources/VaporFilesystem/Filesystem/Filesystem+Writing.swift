@@ -35,7 +35,7 @@ public extension Filesystem {
         }
     }
     
-    public func rename(file: String, to newFile: String, options: FileOptions?) -> Future<()> {
+    public func move(file: String, to newFile: String, options: FileOptions?) -> Future<()> {
         return normalize(path: file, on: worker)
             .and(normalize(path: newFile, on: worker))
             .flatMap { (path, newPath) in
