@@ -5,17 +5,9 @@ extension S3Adapter: FilesystemWriting, FileOverwriteSupporting {
     
     public func write(data: Data, to: String, on worker: Container, options: FileOptions?) -> EventLoopFuture<()> {
         return run(path: to, on: worker) {
-            #warning("FIXME: access overriding")
-            #warning("FIXME: Region is not passed anywhere to upload!")
-            let upload = File.Upload(
-                data: data,
-                bucket: $0.bucket,
-                destination: $0.path,
-                access: self.config.defaultAccess,
-                mime: try self.mediaType(of: to).description
-            )
+            let upload = try self.fileUpload(data: data, to: $0)
             
-            return self.has(file: to, on: worker, options: options)
+            return self.has(file: $0.path, on: worker, options: options)
                 .flatMap { has -> Future<()> in
                     guard !has else {
                         throw FilesystemError.alreadyExists
@@ -28,7 +20,19 @@ extension S3Adapter: FilesystemWriting, FileOverwriteSupporting {
     }
     
     public func update(data: Data, to: String, on worker: Container, options: FileOptions?) -> EventLoopFuture<()> {
-        fatalError("Not implemented.")
+        return run(path: to, on: worker) {
+            let upload = try self.fileUpload(data: data, to: $0)
+            
+            return self.has(file: $0.path, on: worker, options: options)
+                .flatMap { has -> Future<()> in
+                    guard has else {
+                        throw FilesystemError.notFound
+                    }
+                    
+                    return try self.client.put(file: upload, on: worker)
+                        .transform(to: ())
+            }
+        }
     }
     
     public func rename(file: String, to: String, on: Container, options: FileOptions?) -> EventLoopFuture<()> {
