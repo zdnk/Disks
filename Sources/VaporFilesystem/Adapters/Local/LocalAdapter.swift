@@ -11,11 +11,10 @@ open class LocalAdapter {
     
     public let fileManager: FileManager
     public let root: String
-    
     public let queueFactory: QueueFactory
     
     #warning("TODO: Default attributes like file permissions etc.")
-    public init(fileManager: FileManager = .default, root: String, queueFactory: @escaping QueueFactory = LocalAdapter.defaultQueueFactory) {
+    public init(root: String, fileManager: FileManager = .default, queueFactory: @escaping QueueFactory = LocalAdapter.defaultQueueFactory) {
         self.fileManager = fileManager
         self.root = root
         self.queueFactory = queueFactory
