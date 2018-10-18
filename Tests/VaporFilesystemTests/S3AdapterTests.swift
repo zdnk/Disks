@@ -122,7 +122,7 @@ fileprivate extension S3AdapterTests {
     
     func createAdapter() throws -> S3Adapter {
         return try S3Adapter(
-            bucket: "com.zdnkt.vapor-filesystem.testing",
+            bucket: Environment.get("S3_BUCKET")!,
             config: S3Adapter.Config(
                 auth: S3Adapter.Auth(
                     accessKey: Environment.get("S3_ACCESS_KEY")!,
