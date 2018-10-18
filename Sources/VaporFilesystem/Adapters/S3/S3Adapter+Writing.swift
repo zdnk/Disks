@@ -35,8 +35,11 @@ extension S3Adapter: FilesystemWriting, FileOverwriteSupporting {
         }
     }
     
-    public func move(file: String, to: String, on: Container, options: FileOptions?) -> EventLoopFuture<()> {
-        fatalError("Not implemented.")
+    public func move(file: String, to: String, on worker: Container, options: FileOptions?) -> EventLoopFuture<()> {
+        return self.copy(file: file, to: to, on: worker, options: options)
+            .flatMap { (_) in
+                return self.delete(file: file, on: worker, options: options)
+        }
     }
     
     public func copy(file: String, to: String, on worker: Container, options: FileOptions?) -> EventLoopFuture<()> {
