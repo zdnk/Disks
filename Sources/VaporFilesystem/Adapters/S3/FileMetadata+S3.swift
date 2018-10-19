@@ -102,3 +102,25 @@ public extension S3Metadata {
     }
     
 }
+
+extension File.Info: FileMetadataConvertible {
+    
+    public func fileMetadata() throws -> FileMetadata {
+        var meta = FileMetadata()
+        meta.set(key: .s3Adapter, to: true)
+        meta.set(key: .s3Bucket, to: bucket)
+        meta.set(key: .s3Region, to: region)
+        meta.set(key: .s3Access, to: access)
+        meta.set(key: .s3Server, to: server)
+        meta.set(key: .s3ETag, to: etag)
+        meta.set(key: .s3Expiration, to: expiration)
+        meta.set(key: .s3VersionId, to: versionId)
+        meta.set(key: .s3StorageClass, to: storageClass)
+        
+        meta.set(key: .size, to: size)
+        meta.set(key: .created, to: created)
+        meta.set(key: .modified, to: modified)
+        return meta
+    }
+    
+}

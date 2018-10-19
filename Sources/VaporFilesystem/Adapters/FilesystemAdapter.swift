@@ -13,7 +13,7 @@ public protocol FilesystemReading {
     
     func has(file: String, on: Container, options: FileOptions) -> Future<Bool>
     func read(file: String, on: Container, options: FileOptions) -> Future<Data>
-    func metadata(of: String, on: Container, options: FileOptions) -> Future<FileMetadata>
+    func metadata(of: String, on: Container, options: FileOptions) -> Future<FileMetadataConvertible>
     func size(of: String, on: Container, options: FileOptions) -> Future<Int>
     func mediaType(of: String, on: Container, options: FileOptions) -> Future<MediaType>
     

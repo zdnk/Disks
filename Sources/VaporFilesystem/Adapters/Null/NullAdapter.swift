@@ -13,7 +13,7 @@ extension NullAdapter: FilesystemReading {
         return worker.eventLoop.newFailedFuture(error: FilesystemError.notFound)
     }
     
-    public func metadata(of file: String, on worker: Container, options: FileOptions) -> EventLoopFuture<FileMetadata> {
+    public func metadata(of file: String, on worker: Container, options: FileOptions) -> EventLoopFuture<FileMetadataConvertible> {
         return worker.eventLoop.newFailedFuture(error: FilesystemError.notFound)
     }
     

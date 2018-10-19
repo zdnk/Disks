@@ -18,9 +18,11 @@ extension S3Adapter: FilesystemReading {
         }
     }
     
-    public func metadata(of: String, on: Container, options: FileOptions) -> EventLoopFuture<FileMetadata> {
-        #warning("TODO: Implement metadata getting")
-        fatalError("Not implemented.")
+    public func metadata(of file: String, on worker: Container, options: FileOptions) -> EventLoopFuture<FileMetadataConvertible> {
+        return run(path: file, on: worker) {
+            return try self.client.get(fileInfo: $0, on: worker)
+                .map { $0 }
+        }
     }
     
     public func size(of file: String, on worker: Container, options: FileOptions) -> EventLoopFuture<Int> {

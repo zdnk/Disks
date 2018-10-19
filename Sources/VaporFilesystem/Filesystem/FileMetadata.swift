@@ -1,5 +1,11 @@
 import Foundation
 
+public protocol FileMetadataConvertible {
+    
+    func fileMetadata() throws -> FileMetadata
+    
+}
+
 public struct FileMetadataKey: Hashable {
     
     public let identifier: String
@@ -19,9 +25,13 @@ public extension FileMetadataKey {
     
 }
 
-public struct FileMetadata: KeyValueStoring {
+public struct FileMetadata: KeyValueStoring, FileMetadataConvertible {
     
     public var storage: [FileMetadataKey: Any] = [:]
+    
+    public func fileMetadata() throws -> FileMetadata {
+        return self
+    }
     
 }
 

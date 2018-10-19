@@ -51,7 +51,7 @@ extension Filesystem {
                     on: self.worker,
                     options: options?.fileOptions() ?? .empty
                 )
-        }
+            }.map { try $0.fileMetadata() }
     }
     
     public func size(of file: String, options: FileOptionsConvertible?) -> Future<Int> {

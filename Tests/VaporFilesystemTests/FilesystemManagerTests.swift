@@ -66,7 +66,7 @@ fileprivate class DummyAdapter: FilesystemAdapter {
         fatalError()
     }
     
-    func metadata(of: String, on: Container, options: FileOptions) -> EventLoopFuture<FileMetadata> {
+    func metadata(of: String, on: Container, options: FileOptions) -> EventLoopFuture<FileMetadataConvertible> {
         fatalError()
     }
     

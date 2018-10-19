@@ -21,7 +21,7 @@ extension LocalAdapter: FilesystemReading {
         }
     }
     
-    public func metadata(of file: String, on worker: Container, options: FileOptions) -> EventLoopFuture<FileMetadata> {
+    public func metadata(of file: String, on worker: Container, options: FileOptions) -> EventLoopFuture<FileMetadataConvertible> {
         #warning("TODO: Metadata mapping")
         return run(on: worker) {
             let path = self.absolutePath(to: file)
@@ -50,7 +50,7 @@ extension LocalAdapter: FilesystemReading {
     public func size(of file: String, on worker: Container, options: FileOptions) -> EventLoopFuture<Int> {
         return metadata(of: file, on: worker, options: .empty)
             .map { meta in
-                guard let size = try meta.get(.size, as: Int.self) else {
+                guard let size = try meta.fileMetadata().size else {
                     throw FilesystemError.fileSizeNotAvailable
                 }
                 
