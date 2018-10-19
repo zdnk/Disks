@@ -6,29 +6,29 @@ public protocol FilesystemType {
     var adapter: FilesystemAdapter { get }
     var worker: Container { get }
     
-    func has(file: String, options: FileOptions?) -> Future<Bool>
-    func read(file: String, options: FileOptions?) -> Future<Data>
-    func listContents(of: String, recursive: Bool, options: FileOptions?) -> Future<[String]>
-    func metadata(of: String, options: FileOptions?) -> Future<FileMetadata>
-    func size(of: String, options: FileOptions?) -> Future<Int>
-    func timestamp(of: String, options: FileOptions?) -> Future<Date>
-    func write(data: Data, to: String, options: FileOptions?) -> Future<()>
+    func has(file: String, options: FileOptionsConvertible?) -> Future<Bool>
+    func read(file: String, options: FileOptionsConvertible?) -> Future<Data>
+    func listContents(of: String, recursive: Bool, options: FileOptionsConvertible?) -> Future<[String]>
+    func metadata(of: String, options: FileOptionsConvertible?) -> Future<FileMetadata>
+    func size(of: String, options: FileOptionsConvertible?) -> Future<Int>
+    func timestamp(of: String, options: FileOptionsConvertible?) -> Future<Date>
+    func write(data: Data, to: String, options: FileOptionsConvertible?) -> Future<()>
 //    func write(file: String, to: String) -> Future<()>
-    func update(data: Data, to: String, options: FileOptions?) -> Future<()>
+    func update(data: Data, to: String, options: FileOptionsConvertible?) -> Future<()>
 //    func update(file: String, to: String) -> Future<()>
-    func put(data: Data, to: String, options: FileOptions?) -> Future<()>
+    func put(data: Data, to: String, options: FileOptionsConvertible?) -> Future<()>
 //    func put(file: String, to: String) -> Future<()>
-    func move(file: String, to: String, options: FileOptions?) -> Future<()>
-    func copy(file: String, to: String, options: FileOptions?) -> Future<()>
-    func delete(file: String, options: FileOptions?) -> Future<()>
-    func delete(directory: String, options: FileOptions?) -> Future<()>
-    func create(directory: String, options: FileOptions?) -> Future<()>
+    func move(file: String, to: String, options: FileOptionsConvertible?) -> Future<()>
+    func copy(file: String, to: String, options: FileOptionsConvertible?) -> Future<()>
+    func delete(file: String, options: FileOptionsConvertible?) -> Future<()>
+    func delete(directory: String, options: FileOptionsConvertible?) -> Future<()>
+    func create(directory: String, options: FileOptionsConvertible?) -> Future<()>
     
 }
 
 extension FilesystemType {
     
-    func rename(file: String, to: String, options: FileOptions?) -> Future<()> {
+    func rename(file: String, to: String, options: FileOptionsConvertible?) -> Future<()> {
         guard var path = URL(string: file) else {
             return worker.eventLoop.newFailedFuture(error: FilesystemError.invalidPath)
         }

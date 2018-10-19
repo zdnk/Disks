@@ -3,21 +3,21 @@ import Vapor
 
 extension Filesystem {
     
-    public func has(file: String, options: FileOptions?) -> Future<Bool> {
+    public func has(file: String, options: FileOptionsConvertible?) -> Future<Bool> {
         return normalize(path: file, on: worker)
             .flatMap { path in
-                self.adapter.has(file: path, on: self.worker, options: options)
+                try self.adapter.has(file: path, on: self.worker, options: options?.fileOptions())
         }
     }
     
-    public func read(file: String, options: FileOptions?) -> Future<Data> {
+    public func read(file: String, options: FileOptionsConvertible?) -> Future<Data> {
         return normalize(path: file, on: worker)
             .flatMap { path in
-                self.adapter.read(file: path, on: self.worker, options: options)
+                try self.adapter.read(file: path, on: self.worker, options: options?.fileOptions())
         }
     }
     
-    public func listContents(of directory: String, recursive: Bool, options: FileOptions?) -> Future<[String]> {
+    public func listContents(of directory: String, recursive: Bool, options: FileOptionsConvertible?) -> Future<[String]> {
         guard let adapter = self.adapter as? FilesystemContentListing else {
             return worker.eventLoop.newFailedFuture(
                 error: FilesystemError.listingUnsupported(by: self.adapter)
@@ -26,28 +26,28 @@ extension Filesystem {
         
         return normalize(path: directory, on: worker)
             .flatMap { path in
-                adapter.listContents(of: path, recursive: recursive, on: self.worker, options: options)
+                try adapter.listContents(of: path, recursive: recursive, on: self.worker, options: options?.fileOptions())
         }
     }
     
-    public func metadata(of file: String, options: FileOptions?) -> Future<FileMetadata> {
+    public func metadata(of file: String, options: FileOptionsConvertible?) -> Future<FileMetadata> {
         return normalize(path: file, on: worker)
             .flatMap { path in
-                self.adapter.metadata(of: path, on: self.worker, options: options)
+                try self.adapter.metadata(of: path, on: self.worker, options: options?.fileOptions())
         }
     }
     
-    public func size(of file: String, options: FileOptions?) -> Future<Int> {
+    public func size(of file: String, options: FileOptionsConvertible?) -> Future<Int> {
         return normalize(path: file, on: worker)
             .flatMap { path in
-                self.adapter.size(of: path, on: self.worker, options: options)
+                try self.adapter.size(of: path, on: self.worker, options: options?.fileOptions())
         }
     }
     
-    public func timestamp(of file: String, options: FileOptions?) -> Future<Date> {
+    public func timestamp(of file: String, options: FileOptionsConvertible?) -> Future<Date> {
         return normalize(path: file, on: worker)
             .flatMap { path in
-                self.adapter.timestamp(of: path, on: self.worker, options: options)
+                try self.adapter.timestamp(of: path, on: self.worker, options: options?.fileOptions())
         }
     }
     

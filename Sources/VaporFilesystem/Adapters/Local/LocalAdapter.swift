@@ -10,18 +10,17 @@ open class LocalAdapter {
     }
     
     public let fileManager: FileManager
-    public let root: String
+    public let config: Config
     public let queueFactory: QueueFactory
     
-    #warning("TODO: Default attributes like file permissions etc.")
-    public init(root: String, fileManager: FileManager = .default, queueFactory: @escaping QueueFactory = LocalAdapter.defaultQueueFactory) {
+    public init(config: Config, fileManager: FileManager = .default, queueFactory: @escaping QueueFactory = LocalAdapter.defaultQueueFactory) {
         self.fileManager = fileManager
-        self.root = root
+        self.config = config
         self.queueFactory = queueFactory
     }
     
     public func absolutePath(to path: String) -> String {
-        let prefixed = Filesystem.applyPathPrefix(self.root, to: path)
+        let prefixed = Filesystem.applyPathPrefix(config.root, to: path)
         return URL(fileURLWithPath: prefixed).absoluteString
     }
     

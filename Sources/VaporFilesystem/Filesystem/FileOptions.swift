@@ -1,5 +1,11 @@
 import Foundation
 
+public protocol FileOptionsConvertible {
+    
+    func fileOptions() throws -> FileOptions
+    
+}
+
 public struct FileOptionKey: Hashable {
     
     public let identifier: String
@@ -13,5 +19,13 @@ public struct FileOptionKey: Hashable {
 public struct FileOptions: KeyValueStoring {
     
     public var storage: [FileOptionKey: Any] = [:]
+    
+}
+
+extension FileOptions: FileOptionsConvertible {
+    
+    public func fileOptions() throws -> FileOptions {
+        return self
+    }
     
 }

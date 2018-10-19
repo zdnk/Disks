@@ -72,4 +72,14 @@ extension KeyValueStoring {
         }
     }
     
+    public func merged<T>(with other: T) throws -> Self where T: KeyValueStoring, T.Key == Key {
+        var this = self
+        let otherStorage = storage
+        this.storage.merge(otherStorage) { _, second in
+            return second
+        }
+        
+        return this
+    }
+    
 }
