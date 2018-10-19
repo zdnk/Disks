@@ -22,27 +22,11 @@ extension LocalAdapter: FilesystemReading {
     }
     
     public func metadata(of file: String, on worker: Container, options: FileOptions) -> EventLoopFuture<FileMetadataConvertible> {
-        #warning("TODO: Metadata mapping")
         return run(on: worker) {
             let path = self.absolutePath(to: file)
             let attributes = try self.fileManager.attributesOfItem(atPath: path)
-            var meta: FileMetadata = FileMetadata()
-            
-            for (key, value) in attributes {
-                switch key {
-                case .creationDate:
-                    meta.set(key: .created, to: value)
-                    
-                case .modificationDate:
-                    meta.set(key: .modified, to: value)
-                    
-                case .size:
-                    meta.set(key: .size, to: value as? Int)
-                    
-                default: break
-                }
-            }
-            
+            var meta = try attributes.fileMetadata()
+            try meta.set(key: .mime, to: self.mediaType(of: file).description)
             return meta
         }
     }

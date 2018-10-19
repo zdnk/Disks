@@ -2,11 +2,18 @@ import Foundation
 
 public enum KeyValueStoreError: Swift.Error {
     case castError(from: Any, to: Any)
+    case missingValue(in: Any, forKey: String)
+}
+
+public protocol Identifiable {
+    
+    var identifier: String { get }
+    
 }
 
 public protocol KeyValueStoring {
     
-    associatedtype Key: Hashable
+    associatedtype Key: Identifiable & Hashable
     
     var storage: [Key: Any] { get set }
     
@@ -70,6 +77,19 @@ extension KeyValueStoring {
             print(error)
             return nil
         }
+    }
+    
+    public func getRequired<T>(_ key: Key, as: T.Type) throws -> T {
+        let optionalValue = try self.get(key, as: T.self)
+        guard let value = optionalValue else {
+            throw KeyValueStoreError.missingValue(in: self, forKey: key.identifier)
+        }
+        
+        return value
+    }
+    
+    public func getRequired<T>(_ key: Key) throws -> T {
+        return try getRequired(key, as: T.self)
     }
     
     public func merged<T>(with other: T) throws -> Self where T: KeyValueStoring, T.Key == Key {

@@ -6,7 +6,7 @@ public protocol FileOptionsConvertible {
     
 }
 
-public struct FileOptionKey: Hashable {
+public struct FileOptionKey: Hashable, Identifiable {
     
     public let identifier: String
     

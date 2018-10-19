@@ -71,29 +71,16 @@ public extension S3Metadata {
     
     public enum Error: Swift.Error {
         case notFromS3
-        case missingKey(FileMetadataKey)
     }
     
     public init(from meta: FileMetadata) throws {
-        guard let isS3 = try? meta.get(.s3Adapter, as: Bool.self), isS3 == true else {
+        guard let isS3 = try meta.get(.s3Adapter, as: Bool.self), isS3 == true else {
             throw Error.notFromS3
         }
         
-        guard let bucket = try meta.get(.s3Bucket, as: String.self) else {
-            throw Error.missingKey(.s3Bucket)
-        }
-        
-        guard let region = try meta.get(.s3Region, as: Region.self) else {
-            throw Error.missingKey(.s3Region)
-        }
-        
-        guard let access = try meta.get(.s3Access, as: AccessControlList.self) else {
-            throw Error.missingKey(.s3Access)
-        }
-        
-        self.bucket = bucket
-        self.region = region
-        self.access = access
+        self.bucket = try meta.getRequired(.s3Bucket)
+        self.region = try meta.getRequired(.s3Region)
+        self.access = try meta.getRequired(.s3Access)
         self.server = try meta.get(.s3Server)
         self.etag = try meta.get(.s3ETag)
         self.expiration = try meta.get(.s3Expiration)

@@ -6,7 +6,7 @@ public protocol FileMetadataConvertible {
     
 }
 
-public struct FileMetadataKey: Hashable {
+public struct FileMetadataKey: Hashable, Identifiable {
     
     public let identifier: String
     
