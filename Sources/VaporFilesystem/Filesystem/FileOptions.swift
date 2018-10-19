@@ -20,6 +20,10 @@ public struct FileOptions: KeyValueStoring {
     
     public var storage: [FileOptionKey: Any] = [:]
     
+    public static var empty: FileOptions {
+        return FileOptions()
+    }
+    
 }
 
 extension FileOptions: FileOptionsConvertible {

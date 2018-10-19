@@ -3,7 +3,7 @@ import Vapor
 
 extension LocalAdapter: FilesystemWriting {
 
-    open func write(data: Data, to file: String, on worker: Container, options: FileOptions?) -> EventLoopFuture<()> {
+    open func write(data: Data, to file: String, on worker: Container, options: FileOptions) -> EventLoopFuture<()> {
         return run(on: worker) {
             let path = self.absolutePath(to: file)
             guard self.fileManager.createFile(atPath: path, contents: data, attributes: nil) else {
@@ -14,7 +14,7 @@ extension LocalAdapter: FilesystemWriting {
         }
     }
 
-    open func update(data: Data, to file: String, on worker: Container, options: FileOptions?) -> EventLoopFuture<()> {
+    open func update(data: Data, to file: String, on worker: Container, options: FileOptions) -> EventLoopFuture<()> {
         return run(on: worker) {
             let path = self.absolutePath(to: file)
             let fileURL = URL(fileURLWithPath: path)
@@ -44,7 +44,7 @@ extension LocalAdapter: FilesystemWriting {
         }
     }
 
-    open func move(file: String, to newName: String, on worker: Container, options: FileOptions?) -> EventLoopFuture<()> {
+    open func move(file: String, to newName: String, on worker: Container, options: FileOptions) -> EventLoopFuture<()> {
         return run(on: worker) {
             let path = self.absolutePath(to: file)
             let fileURL = URL(fileURLWithPath: path)
@@ -56,7 +56,7 @@ extension LocalAdapter: FilesystemWriting {
         }
     }
 
-    open func copy(file: String, to newFile: String, on worker: Container, options: FileOptions?) -> EventLoopFuture<()> {
+    open func copy(file: String, to newFile: String, on worker: Container, options: FileOptions) -> EventLoopFuture<()> {
         return run(on: worker) {
             let path = self.absolutePath(to: file)
             let newPath = self.absolutePath(to: file)
@@ -65,7 +65,7 @@ extension LocalAdapter: FilesystemWriting {
         }
     }
 
-    open func delete(file: String, on worker: Container, options: FileOptions?) -> EventLoopFuture<()> {
+    open func delete(file: String, on worker: Container, options: FileOptions) -> EventLoopFuture<()> {
         return run(on: worker) {
             let path = self.absolutePath(to: file)
             try self.fileManager.removeItem(atPath: path)
@@ -73,7 +73,7 @@ extension LocalAdapter: FilesystemWriting {
         }
     }
 
-    open func delete(directory: String, on worker: Container, options: FileOptions?) -> EventLoopFuture<()> {
+    open func delete(directory: String, on worker: Container, options: FileOptions) -> EventLoopFuture<()> {
         return run(on: worker) {
             let path = self.absolutePath(to: directory)
             try self.fileManager.removeItem(atPath: path)
@@ -81,7 +81,7 @@ extension LocalAdapter: FilesystemWriting {
         }
     }
 
-    open func create(directory: String, on worker: Container, options: FileOptions?) -> EventLoopFuture<()> {
+    open func create(directory: String, on worker: Container, options: FileOptions) -> EventLoopFuture<()> {
         return run(on: worker) {
             let path = self.absolutePath(to: directory)
             try self.fileManager.createDirectory(atPath: path, withIntermediateDirectories: true, attributes: nil)

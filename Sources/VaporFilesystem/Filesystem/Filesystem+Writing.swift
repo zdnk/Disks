@@ -6,14 +6,24 @@ public extension Filesystem {
     public func write(data: Data, to file: String, options: FileOptionsConvertible?) -> Future<()> {
         return normalize(path: file, on: worker)
             .flatMap { path in
-                try self.adapter.write(data: data, to: path, on: self.worker, options: options?.fileOptions())
+                try self.adapter.write(
+                    data: data,
+                    to: path,
+                    on: self.worker,
+                    options: options?.fileOptions() ?? .empty
+                )
         }
     }
     
     public func update(data: Data, to file: String, options: FileOptionsConvertible?) -> Future<()> {
         return normalize(path: file, on: worker)
             .flatMap { path in
-                try self.adapter.update(data: data, to: path, on: self.worker, options: options?.fileOptions())
+                try self.adapter.update(
+                    data: data,
+                    to: path,
+                    on: self.worker,
+                    options: options?.fileOptions() ?? .empty
+                )
         }
     }
     
@@ -25,13 +35,23 @@ public extension Filesystem {
             }.flatMap { (exists, path) in
                 if exists {
                     if self.adapter is FileOverwriteSupporting {
-                        return try self.adapter.update(data: data, to: path, on: self.worker, options: options?.fileOptions())
+                        return try self.adapter.update(
+                            data: data,
+                            to: path,
+                            on: self.worker,
+                            options: options?.fileOptions() ?? .empty
+                        )
                     }
                     
                     throw FilesystemError.noFileOverrideSupport
                 }
                 
-                return try self.adapter.write(data: data, to: path, on: self.worker, options: options?.fileOptions())
+                return try self.adapter.write(
+                    data: data,
+                    to: path,
+                    on: self.worker,
+                    options: options?.fileOptions() ?? .empty
+                )
         }
     }
     
@@ -39,7 +59,12 @@ public extension Filesystem {
         return normalize(path: file, on: worker)
             .and(normalize(path: newFile, on: worker))
             .flatMap { (path, newPath) in
-                try self.adapter.move(file: path, to: newPath, on: self.worker, options: options?.fileOptions())
+                try self.adapter.move(
+                    file: path,
+                    to: newPath,
+                    on: self.worker,
+                    options: options?.fileOptions() ?? .empty
+                )
         }
     }
     
@@ -47,14 +72,23 @@ public extension Filesystem {
         return normalize(path: file, on: worker)
             .and(normalize(path: newFile, on: worker))
             .flatMap { (path, newPath) in
-                try self.adapter.copy(file: path, to: newPath, on: self.worker, options: options?.fileOptions())
+                try self.adapter.copy(
+                    file: path,
+                    to: newPath,
+                    on: self.worker,
+                    options: options?.fileOptions() ?? .empty
+                )
         }
     }
     
     public func delete(file: String, options: FileOptionsConvertible?) -> Future<()> {
         return normalize(path: file, on: worker)
             .flatMap { path in
-                try self.adapter.delete(file: path, on: self.worker, options: options?.fileOptions())
+                try self.adapter.delete(
+                    file: path,
+                    on: self.worker,
+                    options: options?.fileOptions() ?? .empty
+                )
         }
     }
     
@@ -67,14 +101,23 @@ public extension Filesystem {
                 
                 return path
             }.flatMap { path in
-                try self.adapter.delete(directory: path, on: self.worker, options: options?.fileOptions())
+                try self.adapter.delete(
+                    directory: path,
+                    on: self.worker,
+                    options:
+                    options?.fileOptions() ?? .empty
+                )
         }
     }
     
     public func create(directory: String, options: FileOptionsConvertible?) -> Future<()> {
         return normalize(path: directory, on: worker)
             .flatMap { path in
-                try self.adapter.create(directory: path, on: self.worker, options: options?.fileOptions())
+                try self.adapter.create(
+                    directory: path,
+                    on: self.worker,
+                    options: options?.fileOptions() ?? .empty
+                )
         }
     }
     

@@ -28,8 +28,8 @@ extension FileOptionKey {
 
 extension FileOptions {
     
-    public var local: LocalFileOptions? {
-        return try? LocalFileOptions(from: self)
+    public func local() throws -> LocalFileOptions? {
+        return try LocalFileOptions(from: self)
     }
     
 }

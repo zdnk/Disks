@@ -5,7 +5,7 @@ import S3
 extension S3Adapter: FilesystemReading {
     
     
-    public func has(file: String, on worker: Container, options: FileOptions?) -> EventLoopFuture<Bool> {
+    public func has(file: String, on worker: Container, options: FileOptions) -> EventLoopFuture<Bool> {
         return run(path: file, on: worker) {
             return try self.client.get(fileInfo: $0, on: worker)
                 .transform(to: true)
@@ -18,11 +18,11 @@ extension S3Adapter: FilesystemReading {
         }
     }
     
-    public func metadata(of: String, on: Container, options: FileOptions?) -> EventLoopFuture<FileMetadata> {
+    public func metadata(of: String, on: Container, options: FileOptions) -> EventLoopFuture<FileMetadata> {
         fatalError("Not implemented.")
     }
     
-    public func size(of file: String, on worker: Container, options: FileOptions?) -> EventLoopFuture<Int> {
+    public func size(of file: String, on worker: Container, options: FileOptions) -> EventLoopFuture<Int> {
         return run(path: file, on: worker) {
             return try self.client.get(fileInfo: $0, on: worker)
                 .map { $0.size }
@@ -30,7 +30,7 @@ extension S3Adapter: FilesystemReading {
         }
     }
     
-    public func timestamp(of file: String, on worker: Container, options: FileOptions?) -> EventLoopFuture<Date> {
+    public func timestamp(of file: String, on worker: Container, options: FileOptions) -> EventLoopFuture<Date> {
         return run(path: file, on: worker) {
             return try self.client.get(fileInfo: $0, on: worker)
                 .map { $0.created }
@@ -38,7 +38,7 @@ extension S3Adapter: FilesystemReading {
         }
     }
     
-    public func read(file: String, on worker: Container, options: FileOptions?) -> EventLoopFuture<Data> {
+    public func read(file: String, on worker: Container, options: FileOptions) -> EventLoopFuture<Data> {
         return run(path: file, on: worker) {
             return try self.client
                 .get(file: $0, on: worker)

@@ -45,8 +45,8 @@ public extension FileMetadataKey {
 
 public extension FileMetadata {
     
-    public var s3: S3Metadata? {
-        return try? S3Metadata(from: self)
+    public func s3() throws -> S3Metadata {
+        return try S3Metadata(from: self)
     }
     
     public init(with s3: S3Metadata) {

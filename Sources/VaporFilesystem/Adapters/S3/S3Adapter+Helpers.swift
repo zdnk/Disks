@@ -11,15 +11,14 @@ extension S3Adapter {
         )
     }
     
-    public func fileUpload(data: Data, to file: LocationConvertible, options: FileOptions?) throws -> File.Upload {
-        #warning("FIXME: access overriding")
+    public func fileUpload(data: Data, to file: LocationConvertible, options: S3FileOptions) throws -> File.Upload {
         #warning("FIXME: Region is not passed anywhere to upload!")
         return File.Upload(
             data: data,
             bucket: file.bucket,
             destination: file.path,
-            access: self.config.defaultAccess,
-            mime: try self.mediaType(of: file.path).description
+            access: options.access ?? self.config.defaultAccess,
+            mime: try options.mime ?? self.mediaType(of: file.path).description
         )
     }
     
