@@ -11,7 +11,8 @@ final class FilesystemManagerTests: XCTestCase {
     ]
     
     func testUse() throws {
-        let local = LocalAdapter(root: "./")
+        let config = LocalAdapter.Config(root: "./")
+        let local = LocalAdapter(config: config)
         let manager = try FilesystemManager(
             disks: [.potatoes: DummyAdapter(), .images: local],
             default: .images,
@@ -25,7 +26,8 @@ final class FilesystemManagerTests: XCTestCase {
     }
     
     func testDefault() throws {
-        let local = LocalAdapter(root: "./")
+        let config = LocalAdapter.Config(root: "./")
+        let local = LocalAdapter(config: config)
         let dummy = DummyAdapter()
         let manager = try FilesystemManager(
             disks: [.images: local, .potatoes: dummy],
@@ -51,56 +53,56 @@ fileprivate class DummyAdapter: FilesystemAdapter {
     
     var calledHas = false
     
-    func has(file: String, on: Container, options: FileOptions?) -> EventLoopFuture<Bool> {
+    func has(file: String, on: Container, options: FileOptions) -> EventLoopFuture<Bool> {
         calledHas = true
         return on.eventLoop.newSucceededFuture(result: false)
     }
     
-    func read(file: String, on: Container, options: FileOptions?) -> EventLoopFuture<Data> {
+    func read(file: String, on: Container, options: FileOptions) -> EventLoopFuture<Data> {
         fatalError()
     }
     
-    func listContents(of: String, recursive: Bool, on: Container, options: FileOptions?) -> EventLoopFuture<[String]> {
+    func listContents(of: String, recursive: Bool, on: Container, options: FileOptions) -> EventLoopFuture<[String]> {
         fatalError()
     }
     
-    func metadata(of: String, on: Container, options: FileOptions?) -> EventLoopFuture<FileMetadata> {
+    func metadata(of: String, on: Container, options: FileOptions) -> EventLoopFuture<FileMetadata> {
         fatalError()
     }
     
-    func size(of: String, on: Container, options: FileOptions?) -> EventLoopFuture<Int> {
+    func size(of: String, on: Container, options: FileOptions) -> EventLoopFuture<Int> {
         fatalError()
     }
     
-    func timestamp(of: String, on: Container, options: FileOptions?) -> EventLoopFuture<Date> {
+    func timestamp(of: String, on: Container, options: FileOptions) -> EventLoopFuture<Date> {
         fatalError()
     }
     
-    func write(data: Data, to: String, on: Container, options: FileOptions?) -> EventLoopFuture<()> {
+    func write(data: Data, to: String, on: Container, options: FileOptions) -> EventLoopFuture<()> {
         fatalError()
     }
     
-    func update(data: Data, to: String, on: Container, options: FileOptions?) -> EventLoopFuture<()> {
+    func update(data: Data, to: String, on: Container, options: FileOptions) -> EventLoopFuture<()> {
         fatalError()
     }
     
-    func move(file: String, to: String, on: Container, options: FileOptions?) -> EventLoopFuture<()> {
+    func move(file: String, to: String, on: Container, options: FileOptions) -> EventLoopFuture<()> {
         fatalError()
     }
     
-    func copy(file: String, to: String, on: Container, options: FileOptions?) -> EventLoopFuture<()> {
+    func copy(file: String, to: String, on: Container, options: FileOptions) -> EventLoopFuture<()> {
         fatalError()
     }
     
-    func delete(file: String, on: Container, options: FileOptions?) -> EventLoopFuture<()> {
+    func delete(file: String, on: Container, options: FileOptions) -> EventLoopFuture<()> {
         fatalError()
     }
     
-    func delete(directory: String, on: Container, options: FileOptions?) -> EventLoopFuture<()> {
+    func delete(directory: String, on: Container, options: FileOptions) -> EventLoopFuture<()> {
         fatalError()
     }
     
-    func create(directory: String, on: Container, options: FileOptions?) -> EventLoopFuture<()> {
+    func create(directory: String, on: Container, options: FileOptions) -> EventLoopFuture<()> {
         fatalError()
     }
     

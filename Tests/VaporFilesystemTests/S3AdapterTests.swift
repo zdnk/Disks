@@ -27,27 +27,27 @@ final class S3AdapterTests: XCTestCase {
     
     func testReadIntegration() throws {
         useTestFile("read_test1.txt") {
-            let data = try adapter.read(file: "read_test1.txt", on: container, options: nil).wait()
+            let data = try adapter.read(file: "read_test1.txt", on: container, options: .empty).wait()
             XCTAssertEqual(data.count, testFileSize)
         }
     }
     
     func testSizeIntegration() throws {
         useTestFile("size_test.txt") {
-            let size = try adapter.size(of: "size_test.txt", on: container, options: nil).wait()
+            let size = try adapter.size(of: "size_test.txt", on: container, options: .empty).wait()
             XCTAssertEqual(size, testFileSize)
         }
     }
     
     func testPositiveHasIntegration() throws {
         useTestFile("positive_has_test.txt") {
-            let has = try adapter.has(file: "positive_has_test.txt", on: container, options: nil).wait()
+            let has = try adapter.has(file: "positive_has_test.txt", on: container, options: .empty).wait()
             XCTAssertTrue(has)
         }
     }
     
     func testNegativeHasIntegration() throws {
-        let has = try adapter.has(file: "some/fake/file.png", on: container, options: nil).wait()
+        let has = try adapter.has(file: "some/fake/file.png", on: container, options: .empty).wait()
         XCTAssertFalse(has)
     }
     
@@ -55,7 +55,7 @@ final class S3AdapterTests: XCTestCase {
         let file = "write_test.txt"
         
         useTestFile(file) {
-            let hasAfter = try adapter.has(file: file, on: container, options: nil).wait()
+            let hasAfter = try adapter.has(file: file, on: container, options: .empty).wait()
             XCTAssertTrue(hasAfter)
         }
     }
@@ -64,8 +64,8 @@ final class S3AdapterTests: XCTestCase {
         let file = "delete_test.txt"
         
         useTestFile(file) {
-            try adapter.delete(file: file, on: container, options: nil).wait()
-            let has = try adapter.has(file: file, on: container, options: nil).wait()
+            try adapter.delete(file: file, on: container, options: .empty).wait()
+            let has = try adapter.has(file: file, on: container, options: .empty).wait()
             XCTAssertFalse(has)
         }
     }
@@ -75,14 +75,14 @@ final class S3AdapterTests: XCTestCase {
         let destination = "copy_destiatio_test.txt"
         
         useTestFile(original) {
-            try adapter.copy(file: original, to: destination, on: container, options: nil).wait()
-            let hasDestination = try adapter.has(file: destination, on: container, options: nil).wait()
+            try adapter.copy(file: original, to: destination, on: container, options: .empty).wait()
+            let hasDestination = try adapter.has(file: destination, on: container, options: .empty).wait()
             XCTAssertTrue(hasDestination)
             
-            let hasOriginal = try adapter.has(file: original, on: container, options: nil).wait()
+            let hasOriginal = try adapter.has(file: original, on: container, options: .empty).wait()
             XCTAssertTrue(hasOriginal)
             
-            try adapter.delete(file: destination, on: container, options: nil).wait()
+            try adapter.delete(file: destination, on: container, options: .empty).wait()
         }
     }
     
@@ -135,13 +135,13 @@ fileprivate extension S3AdapterTests {
     }
     
     fileprivate func writeTestFile(_ path: String) throws {
-        try adapter.write(data: testFileData, to: path, on: container, options: nil).wait()
+        try adapter.write(data: testFileData, to: path, on: container, options: .empty).wait()
     }
     
     fileprivate func deleteTestFile(_ path: String) throws {
-        let has = try adapter.has(file: path, on: container, options: nil).wait()
+        let has = try adapter.has(file: path, on: container, options: .empty).wait()
         if has {
-            try adapter.delete(file: path, on: container, options: nil).wait()
+            try adapter.delete(file: path, on: container, options: .empty).wait()
         }
     }
     
