@@ -22,6 +22,7 @@ extension LocalAdapter: FilesystemReading {
     }
     
     public func metadata(of file: String, on worker: Container, options: FileOptions) -> EventLoopFuture<FileMetadata> {
+        #warning("TODO: Metadata mapping")
         return run(on: worker) {
             let path = self.absolutePath(to: file)
             let attributes = try self.fileManager.attributesOfItem(atPath: path)
