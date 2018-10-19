@@ -65,15 +65,4 @@ extension Filesystem {
         }
     }
     
-    public func timestamp(of file: String, options: FileOptionsConvertible?) -> Future<Date> {
-        return normalize(path: file, on: worker)
-            .flatMap { path in
-                try self.adapter.timestamp(
-                    of: path,
-                    on: self.worker,
-                    options: options?.fileOptions() ?? .empty
-                )
-        }
-    }
-    
 }

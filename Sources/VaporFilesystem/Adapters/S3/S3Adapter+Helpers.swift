@@ -6,7 +6,7 @@ extension S3Adapter {
     public func fileLocation(for path: String) -> File.Location {
         return File.Location(
             path: path,
-            bucket: bucket,
+            bucket: config.bucket,
             region: config.region
         )
     }

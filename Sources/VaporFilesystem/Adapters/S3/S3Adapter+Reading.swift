@@ -30,14 +30,6 @@ extension S3Adapter: FilesystemReading {
         }
     }
     
-    public func timestamp(of file: String, on worker: Container, options: FileOptions) -> EventLoopFuture<Date> {
-        return run(path: file, on: worker) {
-            return try self.client.get(fileInfo: $0, on: worker)
-                .map { $0.created }
-                .unwrap(or: FilesystemError.timestampNotAvailable)
-        }
-    }
-    
     public func read(file: String, on worker: Container, options: FileOptions) -> EventLoopFuture<Data> {
         return run(path: file, on: worker) {
             return try self.client

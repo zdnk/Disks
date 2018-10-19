@@ -3,13 +3,11 @@ import Foundation
 
 open class S3Adapter {
     
-    public let bucket: String
     public let client: S3
     public let signer: S3Signer
     public let config: Config
     
-    public init(bucket: String, config: Config) throws {
-        self.bucket = bucket
+    public init(config: Config) throws {
         self.config = config
         
         let signerConfig = S3Signer.Config(
@@ -20,7 +18,7 @@ open class S3Adapter {
         )
         
         self.signer = try S3Signer(signerConfig)
-        self.client = try S3(defaultBucket: bucket, signer: self.signer)
+        self.client = try S3(defaultBucket: config.bucket, signer: self.signer)
     }
     
 }

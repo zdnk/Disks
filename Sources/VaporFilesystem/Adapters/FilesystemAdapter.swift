@@ -15,8 +15,6 @@ public protocol FilesystemReading {
     func read(file: String, on: Container, options: FileOptions) -> Future<Data>
     func metadata(of: String, on: Container, options: FileOptions) -> Future<FileMetadata>
     func size(of: String, on: Container, options: FileOptions) -> Future<Int>
-    #warning("FIXME: creationDate and modificationDate")
-    func timestamp(of: String, on: Container, options: FileOptions) -> Future<Date>
     func mediaType(of: String, on: Container, options: FileOptions) -> Future<MediaType>
     
 }

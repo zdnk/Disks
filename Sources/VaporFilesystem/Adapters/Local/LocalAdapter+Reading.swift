@@ -57,15 +57,4 @@ extension LocalAdapter: FilesystemReading {
         }
     }
     
-    public func timestamp(of file: String, on worker: Container, options: FileOptions) -> EventLoopFuture<Date> {
-        return metadata(of: file, on: worker, options: .empty)
-            .map { meta in
-                guard let date = meta.modified else {
-                    throw FilesystemError.timestampNotAvailable
-                }
-                
-                return date
-        }
-    }
-    
 }
