@@ -122,13 +122,13 @@ fileprivate extension S3AdapterTests {
     
     func createAdapter() throws -> S3Adapter {
         return try S3Adapter(
-            bucket: Environment.get("S3_BUCKET")!,
             config: S3Adapter.Config(
+                bucket: Environment.get("S3_BUCKET")!,
+                region: .euCentral1,
                 auth: S3Adapter.Auth(
                     accessKey: Environment.get("S3_ACCESS_KEY")!,
                     secretKey: Environment.get("S3_SECRET_KEY")!
                 ),
-                region: .euCentral1,
                 defaultAccess: .privateAccess
             )
         )
