@@ -8,21 +8,6 @@ open class DiskManager: FilesystemOperating {
         case diskNotRegistered(DiskIdentifier)
     }
     
-    public struct Config {
-        typealias DiskMap = [DiskIdentifier: FilesystemAdapter]
-        let diskMap: DiskMap
-        let `default`: DiskIdentifier
-        
-        init(diskMap: DiskMap, default theDefault: DiskIdentifier) throws {
-            self.diskMap = diskMap
-            self.default = theDefault
-            
-            guard diskMap.keys.contains(theDefault) else {
-                throw Error.defaultNotInDisks
-            }
-        }
-    }
-    
     public let config: Config
     public let container: Container
     
