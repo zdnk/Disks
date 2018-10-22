@@ -1,6 +1,6 @@
 import Foundation
 
-public struct DiskIdentifier: Hashable {
+public struct DiskIdentifier: Identifiable, Hashable {
     
     public let identifier: String
     
