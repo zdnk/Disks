@@ -1,9 +1,8 @@
 import Foundation
-import Vapor
 
-extension Filesystem {
+public enum PathTools {
     
-    public func normalize(path: String) throws -> String {
+    public static func normalize(path: String) throws -> String {
         var normalized = path.replacingOccurrences(of: "\\", with: "/")
         normalized = normalized.trimmingCharacters(in: .whitespacesAndNewlines)
         
@@ -30,7 +29,7 @@ extension Filesystem {
         return parts.joined(separator: "/")
     }
     
-    public func normalize(path: String, on worker: Container) -> Future<String> {
+    public static func normalize(path: String, on worker: Container) -> Future<String> {
         do {
             let result = try normalize(path: path)
             return worker.eventLoop.newSucceededFuture(result: result)

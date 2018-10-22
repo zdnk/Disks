@@ -4,7 +4,7 @@ import Vapor
 public extension Filesystem {
     
     public func write(data: Data, to file: String, options: FileOptionsConvertible?) -> Future<()> {
-        return normalize(path: file, on: worker)
+        return PathTools.normalize(path: file, on: worker)
             .flatMap { path in
                 try self.adapter.write(
                     data: data,
@@ -16,7 +16,7 @@ public extension Filesystem {
     }
     
     public func update(data: Data, to file: String, options: FileOptionsConvertible?) -> Future<()> {
-        return normalize(path: file, on: worker)
+        return PathTools.normalize(path: file, on: worker)
             .flatMap { path in
                 try self.adapter.update(
                     data: data,
@@ -28,7 +28,7 @@ public extension Filesystem {
     }
     
     public func put(data: Data, to file: String, options: FileOptionsConvertible?) -> Future<()> {
-        return normalize(path: file, on: worker)
+        return PathTools.normalize(path: file, on: worker)
             .flatMap { path in
                 self.has(file: path, options: options)
                     .and(result: path)
@@ -56,8 +56,8 @@ public extension Filesystem {
     }
     
     public func move(file: String, to newFile: String, options: FileOptionsConvertible?) -> Future<()> {
-        return normalize(path: file, on: worker)
-            .and(normalize(path: newFile, on: worker))
+        return PathTools.normalize(path: file, on: worker)
+            .and(PathTools.normalize(path: newFile, on: worker))
             .flatMap { (path, newPath) in
                 try self.adapter.move(
                     file: path,
@@ -80,8 +80,8 @@ public extension Filesystem {
     }
     
     public func copy(file: String, to newFile: String, options: FileOptionsConvertible?) -> Future<()> {
-        return normalize(path: file, on: worker)
-            .and(normalize(path: newFile, on: worker))
+        return PathTools.normalize(path: file, on: worker)
+            .and(PathTools.normalize(path: newFile, on: worker))
             .flatMap { (path, newPath) in
                 try self.adapter.copy(
                     file: path,
@@ -93,7 +93,7 @@ public extension Filesystem {
     }
     
     public func delete(file: String, options: FileOptionsConvertible?) -> Future<()> {
-        return normalize(path: file, on: worker)
+        return PathTools.normalize(path: file, on: worker)
             .flatMap { path in
                 try self.adapter.delete(
                     file: path,
@@ -104,7 +104,7 @@ public extension Filesystem {
     }
     
     public func delete(directory: String, options: FileOptionsConvertible?) -> Future<()> {
-        return normalize(path: directory, on: worker)
+        return PathTools.normalize(path: directory, on: worker)
             .map { path in
                 if path == "" {
                     throw FilesystemError.rootViolation
@@ -122,7 +122,7 @@ public extension Filesystem {
     }
     
     public func create(directory: String, options: FileOptionsConvertible?) -> Future<()> {
-        return normalize(path: directory, on: worker)
+        return PathTools.normalize(path: directory, on: worker)
             .flatMap { path in
                 try self.adapter.create(
                     directory: path,

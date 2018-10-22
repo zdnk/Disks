@@ -4,7 +4,7 @@ import Vapor
 extension Filesystem {
     
     public func has(file: String, options: FileOptionsConvertible?) -> Future<Bool> {
-        return normalize(path: file, on: worker)
+        return PathTools.normalize(path: file, on: worker)
             .flatMap { path in
                 try self.adapter.has(
                     file: path,
@@ -15,7 +15,7 @@ extension Filesystem {
     }
     
     public func read(file: String, options: FileOptionsConvertible?) -> Future<Data> {
-        return normalize(path: file, on: worker)
+        return PathTools.normalize(path: file, on: worker)
             .flatMap { path in
                 try self.adapter.read(
                     file: path,
@@ -32,7 +32,7 @@ extension Filesystem {
             )
         }
         
-        return normalize(path: directory, on: worker)
+        return PathTools.normalize(path: directory, on: worker)
             .flatMap { path in
                 try adapter.listContents(
                     of: path,
@@ -44,7 +44,7 @@ extension Filesystem {
     }
     
     public func metadata(of file: String, options: FileOptionsConvertible?) -> Future<FileMetadata> {
-        return normalize(path: file, on: worker)
+        return PathTools.normalize(path: file, on: worker)
             .flatMap { path in
                 try self.adapter.metadata(
                     of: path,
@@ -55,7 +55,7 @@ extension Filesystem {
     }
     
     public func size(of file: String, options: FileOptionsConvertible?) -> Future<Int> {
-        return normalize(path: file, on: worker)
+        return PathTools.normalize(path: file, on: worker)
             .flatMap { path in
                 try self.adapter.size(
                     of: path,
