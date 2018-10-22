@@ -68,6 +68,17 @@ public extension Filesystem {
         }
     }
     
+    func rename(file: String, to: String, options: FileOptionsConvertible?) -> Future<()> {
+        guard var path = URL(string: file) else {
+            return worker.eventLoop.newFailedFuture(error: FilesystemError.invalidPath)
+        }
+        
+        path.deleteLastPathComponent()
+        path.appendPathComponent(to)
+        
+        return self.move(file: file, to: path.absoluteString, options: options)
+    }
+    
     public func copy(file: String, to newFile: String, options: FileOptionsConvertible?) -> Future<()> {
         return normalize(path: file, on: worker)
             .and(normalize(path: newFile, on: worker))

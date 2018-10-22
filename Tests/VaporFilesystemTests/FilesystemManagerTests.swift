@@ -13,25 +13,29 @@ final class FilesystemManagerTests: XCTestCase {
     func testUse() throws {
         let config = LocalAdapter.Config(root: "./")
         let local = LocalAdapter(config: config)
-        let manager = try FilesystemManager(
-            disks: [.potatoes: DummyAdapter(), .images: local],
-            default: .images,
+        let manager = try DiskManager(
+            config: .init(
+                diskMap: [.potatoes: DummyAdapter(), .images: local],
+                default: .images
+            ),
             on: createContainer()
         )
         
         XCTAssertNoThrow(try manager.use(.images))
-        let fs = try manager.use(.images)
-        XCTAssertNotNil(fs.adapter as? LocalAdapter)
-        XCTAssert(fs.adapter as? LocalAdapter === local, "FilesystemManager does not use same instance of adapter")
+        let disk = try manager.use(.images)
+        XCTAssertNotNil(disk.filesystem.adapter as? LocalAdapter)
+        XCTAssert(disk.filesystem.adapter as? LocalAdapter === local, "FilesystemManager does not use same instance of adapter")
     }
     
     func testDefault() throws {
         let config = LocalAdapter.Config(root: "./")
         let local = LocalAdapter(config: config)
         let dummy = DummyAdapter()
-        let manager = try FilesystemManager(
-            disks: [.images: local, .potatoes: dummy],
-            default: .potatoes,
+        let manager = try DiskManager(
+            config: .init(
+                diskMap: [.images: local, .potatoes: dummy],
+                default: .potatoes
+            ),
             on: createContainer()
         )
 
