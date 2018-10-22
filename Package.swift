@@ -13,7 +13,7 @@ let package = Package(
     dependencies: [
         .package(url: "https://github.com/vapor/vapor.git", from: "3.0.0"),
         
-        .package(url: "https://github.com/zdnk/S3.git", .branch("s3-copy-file")),
+        .package(url: "https://github.com/zdnk/S3.git", .branch("master")),
 //        .package(path: "../S3"),
     ],
     targets: [

@@ -68,8 +68,8 @@
         "package": "S3",
         "repositoryURL": "https://github.com/zdnk/S3.git",
         "state": {
-          "branch": "s3-copy-file",
-          "revision": "451dc0328cf41b1c950d0dfb7a2b0de752c7cd17",
+          "branch": "master",
+          "revision": "ac18e242e522e059e079fa05da121e884d2b6dd0",
           "version": null
         }
       },
@@ -168,8 +168,8 @@
         "repositoryURL": "https://github.com/vapor/websocket.git",
         "state": {
           "branch": null,
-          "revision": "149af03348f60ac8b84defdf277112d62fd8c704",
-          "version": "1.0.2"
+          "revision": "eb4277f75f1d96a3d15c852cdd89af1799093dcd",
+          "version": "1.1.0"
         }
       },
       {
