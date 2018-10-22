@@ -5,12 +5,6 @@ public enum KeyValueStoreError: Swift.Error {
     case missingValue(in: Any, forKey: String)
 }
 
-public protocol Identifiable {
-    
-    var identifier: String { get }
-    
-}
-
 public protocol KeyValueStoring {
     
     associatedtype Key: Identifiable & Hashable

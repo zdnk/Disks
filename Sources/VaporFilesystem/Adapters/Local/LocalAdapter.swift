@@ -20,7 +20,7 @@ open class LocalAdapter {
     }
     
     public func absolutePath(to path: String) -> String {
-        let prefixed = PathTools.applyPathPrefix(config.root, to: path)
+        let prefixed = PathTools.applyPrefix(config.root, to: path)
         return URL(fileURLWithPath: prefixed).absoluteString
     }
     

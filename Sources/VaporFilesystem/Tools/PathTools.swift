@@ -38,7 +38,7 @@ public enum PathTools {
         }
     }
     
-    public static func applyPathPrefix(_ prefix: String, to path: String) -> String {
+    public static func applyPrefix(_ prefix: String, to path: String) -> String {
         guard let prefixed = URL(string: path, relativeTo: URL(string: prefix)) else {
             fatalError("Cannot create prefixed URL")
         }
