@@ -1,3 +1,3 @@
 import Foundation
 
-public protocol Storage: DiskManaging { }
+public typealias Storage = DiskManaging
