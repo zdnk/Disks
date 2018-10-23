@@ -1,9 +1,9 @@
 import XCTest
 import Vapor
 
-@testable import VaporFilesystem
+@testable import Disks
 
-final class FilesystemManagerTests: XCTestCase {
+final class DiskManagerTests: XCTestCase {
     
     static var allTests = [
         ("testUse", testUse),
@@ -24,7 +24,6 @@ final class FilesystemManagerTests: XCTestCase {
         XCTAssertNoThrow(try manager.use(.images))
         let disk = try manager.use(.images)
         XCTAssertNotNil(disk.filesystem.adapter as? LocalAdapter)
-        XCTAssert(disk.filesystem.adapter as? LocalAdapter === local, "FilesystemManager does not use same instance of adapter")
     }
     
     func testDefault() throws {

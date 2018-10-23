@@ -1,7 +1,7 @@
 import Foundation
 import XCTest
 
-@testable import VaporFilesystem
+@testable import Disks
 
 final class S3AdapterTests: XCTestCase {
     

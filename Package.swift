@@ -3,28 +3,27 @@
 import PackageDescription
 
 let package = Package(
-    name: "VaporFilesystem",
+    name: "Disks",
     products: [
         .library(
-            name: "VaporFilesystem",
-            targets: ["VaporFilesystem"]
+            name: "Disks",
+            targets: ["Disks"]
         ),
     ],
     dependencies: [
         .package(url: "https://github.com/vapor/vapor.git", from: "3.0.0"),
         
         .package(url: "https://github.com/zdnk/S3.git", .branch("master")),
-//        .package(path: "../S3"),
     ],
     targets: [
         .target(
-            name: "VaporFilesystem",
+            name: "Disks",
             dependencies: ["Vapor", "S3"]
         ),
         .testTarget(
-            name: "VaporFilesystemTests",
+            name: "DisksTests",
             dependencies: [
-                "VaporFilesystem",
+                "Disks",
                 "Vapor",
             ]
         ),
