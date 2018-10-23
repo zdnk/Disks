@@ -1,7 +1,7 @@
 import Foundation
 @_exported import S3
 
-open class S3Adapter {
+public struct S3Adapter {
     
     public let client: S3
     public let signer: S3Signer

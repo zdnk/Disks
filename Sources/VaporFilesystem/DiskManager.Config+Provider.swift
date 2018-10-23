@@ -4,7 +4,7 @@ import Vapor
 extension DiskManager.Config: Provider {
     
     public func register(_ services: inout Services) throws {
-        services.register([FilesystemOperating.self, DiskManaging.self]) { container in
+        services.register(Storage.self) { container in
             return DiskManager(
                 config: self,
                 on: container
@@ -17,3 +17,5 @@ extension DiskManager.Config: Provider {
     }
     
 }
+
+extension DiskManager: Service {}

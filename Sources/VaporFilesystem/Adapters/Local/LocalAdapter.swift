@@ -1,11 +1,11 @@
 import Foundation
 import Vapor
 
-open class LocalAdapter {
+public struct LocalAdapter {
     
     public typealias QueueFactory = () -> DispatchQueue
     
-    open class var defaultQueueFactory: QueueFactory {
+    public static var defaultQueueFactory: QueueFactory {
         return { return DispatchQueue.global(qos: .userInitiated) }
     }
     

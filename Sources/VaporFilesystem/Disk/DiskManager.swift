@@ -1,7 +1,7 @@
 import Foundation
 import Vapor
 
-open class DiskManager: FilesystemOperating {
+public struct DiskManager: FilesystemOperating {
     
     public enum Error: Swift.Error {
         case defaultNotInDisks
@@ -30,9 +30,9 @@ extension DiskManager: FilesystemForwarding {
     
 }
 
-extension DiskManager: DiskManaging {
+extension DiskManager: Storage {
     
-    open func use(_ id: DiskIdentifier) throws -> Disk {
+    public func use(_ id: DiskIdentifier) throws -> Disk {
         guard let adapter = config.diskMap[id] else {
             throw Error.diskNotRegistered(id)
         }
@@ -44,5 +44,3 @@ extension DiskManager: DiskManaging {
     }
     
 }
-
-extension DiskManager: Service {}

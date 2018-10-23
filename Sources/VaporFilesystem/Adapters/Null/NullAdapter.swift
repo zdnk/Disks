@@ -1,7 +1,7 @@
 import Foundation
 import Vapor
 
-open class NullAdapter {
+public struct NullAdapter {
     
     public init() {}
     
