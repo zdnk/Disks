@@ -5,9 +5,9 @@ extension LocalAdapter: FilesystemWriting {
 
     public func write(data: Data, to file: String, on worker: Container, options: FileOptions) -> EventLoopFuture<()> {
         return run(on: worker) {
-            let path = self.absolutePath(to: file)
+            let path = try self.absolutePath(to: file)
             guard self.fileManager.createFile(atPath: path, contents: data, attributes: nil) else {
-                throw FilesystemError.creationFailed
+                throw FilesystemError.creationFailed(path)
             }
             
             return ()
@@ -16,12 +16,12 @@ extension LocalAdapter: FilesystemWriting {
 
     public func update(data: Data, to file: String, on worker: Container, options: FileOptions) -> EventLoopFuture<()> {
         return run(on: worker) {
-            let path = self.absolutePath(to: file)
+            let path = try self.absolutePath(to: file)
             let fileURL = URL(fileURLWithPath: path)
             
             // Check if file exists
             guard try self.has(file: file, on: worker, options: options).wait() else {
-                throw FilesystemError.notFound
+                throw FilesystemError.notFound(path)
             }
             
             // Saving to temp file
@@ -46,7 +46,7 @@ extension LocalAdapter: FilesystemWriting {
 
     public func move(file: String, to newName: String, on worker: Container, options: FileOptions) -> EventLoopFuture<()> {
         return run(on: worker) {
-            let path = self.absolutePath(to: file)
+            let path = try self.absolutePath(to: file)
             let fileURL = URL(fileURLWithPath: path)
             let dir = fileURL.deletingLastPathComponent()
             let newURL = dir.appendingPathComponent(newName, isDirectory: false)
@@ -58,8 +58,8 @@ extension LocalAdapter: FilesystemWriting {
 
     public func copy(file: String, to newFile: String, on worker: Container, options: FileOptions) -> EventLoopFuture<()> {
         return run(on: worker) {
-            let path = self.absolutePath(to: file)
-            let newPath = self.absolutePath(to: file)
+            let path = try self.absolutePath(to: file)
+            let newPath = try self.absolutePath(to: file)
             try self.fileManager.copyItem(atPath: path, toPath: newPath)
             return ()
         }
@@ -67,7 +67,7 @@ extension LocalAdapter: FilesystemWriting {
 
     public func delete(file: String, on worker: Container, options: FileOptions) -> EventLoopFuture<()> {
         return run(on: worker) {
-            let path = self.absolutePath(to: file)
+            let path = try self.absolutePath(to: file)
             try self.fileManager.removeItem(atPath: path)
             return ()
         }
@@ -75,7 +75,7 @@ extension LocalAdapter: FilesystemWriting {
 
     public func delete(directory: String, on worker: Container, options: FileOptions) -> EventLoopFuture<()> {
         return run(on: worker) {
-            let path = self.absolutePath(to: directory)
+            let path = try self.absolutePath(to: directory)
             try self.fileManager.removeItem(atPath: path)
             return ()
         }
@@ -83,7 +83,7 @@ extension LocalAdapter: FilesystemWriting {
 
     public func create(directory: String, on worker: Container, options: FileOptions) -> EventLoopFuture<()> {
         return run(on: worker) {
-            let path = self.absolutePath(to: directory)
+            let path = try self.absolutePath(to: directory)
             try self.fileManager.createDirectory(atPath: path, withIntermediateDirectories: true, attributes: nil)
             return ()
         }

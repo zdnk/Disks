@@ -1,5 +1,11 @@
 import Foundation
 
+public enum PathError: Swift.Error {
+    case invalid(String)
+    case outsideOfRoot(String)
+    case rootViolation
+}
+
 public enum PathTools {
     
     public static func normalize(path: String) throws -> String {
@@ -7,7 +13,7 @@ public enum PathTools {
         normalized = normalized.trimmingCharacters(in: .whitespacesAndNewlines)
         
         guard let url = URL(string: normalized) else {
-            throw FilesystemError.cantConstructURLfromPath(path)
+            throw PathError.invalid(path)
         }
         
         var parts: [String] = []
@@ -17,7 +23,7 @@ public enum PathTools {
             case ".": break
             case "..":
                 guard !parts.isEmpty else {
-                    throw FilesystemError.pathOutsideOfRoot(path)
+                    throw PathError.outsideOfRoot(path)
                 }
                 
                 parts.removeLast()
@@ -38,9 +44,9 @@ public enum PathTools {
         }
     }
     
-    public static func applyPrefix(_ prefix: String, to path: String) -> String {
+    public static func applyPrefix(_ prefix: String, to path: String) throws -> String {
         guard let prefixed = URL(string: path, relativeTo: URL(string: prefix)) else {
-            fatalError("Cannot create prefixed URL")
+            throw PathError.invalid(path)
         }
         
         return prefixed.absoluteString

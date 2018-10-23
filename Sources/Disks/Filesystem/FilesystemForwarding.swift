@@ -24,7 +24,7 @@ extension FilesystemForwarding {
         return self.filesystem.metadata(of: of, options: options)
     }
     
-    public func size(of: String, options: FileOptionsConvertible?) -> EventLoopFuture<Int> {
+    public func size(of: String, options: FileOptionsConvertible?) -> EventLoopFuture<Int?> {
         return self.filesystem.size(of: of, options: options)
     }
     

@@ -1,21 +1,17 @@
 import Foundation
 
+public enum MediaTypeError: Swift.Error {
+    case unresolvable(String)
+}
+
 public enum FilesystemError: Swift.Error {
     
-    case notFound
-    case alreadyExists
-    case unresolvableMediaType
-    case invalidPath
+    case notFound(String)
+    case alreadyExists(String)
     
-    case creationFailed
+    case creationFailed(String)
     
-    case timestampNotAvailable
-    case fileSizeNotAvailable
-    
-    case cantConstructURLfromPath(String)
-    case pathOutsideOfRoot(String)
-    case noFileOverrideSupport
-    case rootViolation
+    case fileOverrideUnsupported(by: FilesystemAdapting)
     
     case listingUnsupported(by: FilesystemAdapting)
     

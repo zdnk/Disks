@@ -43,7 +43,7 @@ public extension Filesystem {
                         )
                     }
                     
-                    throw FilesystemError.noFileOverrideSupport
+                    throw FilesystemError.fileOverrideUnsupported(by: self.adapter)
                 }
                 
                 return try self.adapter.write(
@@ -70,7 +70,7 @@ public extension Filesystem {
     
     func rename(file: String, to: String, options: FileOptionsConvertible?) -> Future<()> {
         guard var path = URL(string: file) else {
-            return worker.eventLoop.newFailedFuture(error: FilesystemError.invalidPath)
+            return worker.eventLoop.newFailedFuture(error: PathError.invalid(file))
         }
         
         path.deleteLastPathComponent()
@@ -107,7 +107,7 @@ public extension Filesystem {
         return PathTools.normalize(path: directory, on: worker)
             .map { path in
                 if path == "" {
-                    throw FilesystemError.rootViolation
+                    throw PathError.rootViolation
                 }
                 
                 return path

@@ -54,7 +54,7 @@ extension Filesystem {
             }.map { try $0.fileMetadata() }
     }
     
-    public func size(of file: String, options: FileOptionsConvertible?) -> Future<Int> {
+    public func size(of file: String, options: FileOptionsConvertible?) -> Future<Int?> {
         return PathTools.normalize(path: file, on: worker)
             .flatMap { path in
                 try self.adapter.size(

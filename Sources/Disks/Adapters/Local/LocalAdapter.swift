@@ -19,8 +19,8 @@ public struct LocalAdapter {
         self.queueFactory = queueFactory
     }
     
-    public func absolutePath(to path: String) -> String {
-        let prefixed = PathTools.applyPrefix(config.root, to: path)
+    public func absolutePath(to path: String) throws -> String {
+        let prefixed = try PathTools.applyPrefix(config.root, to: path)
         return URL(fileURLWithPath: prefixed).absoluteString
     }
     

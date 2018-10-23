@@ -4,14 +4,14 @@ import Vapor
 extension S3Adapter: FilesystemWriting, FileOverwriteSupporting {
     
     public func write(data: Data, to: String, on worker: Container, options: FileOptions) -> EventLoopFuture<()> {
-        return run(path: to, on: worker) {
+        return run(path: to, on: worker) { file in
             let s3Options = try options.s3()
-            let upload = try self.fileUpload(data: data, to: $0, options: s3Options)
+            let upload = try self.fileUpload(data: data, to: file, options: s3Options)
             
-            return self.has(file: $0.path, on: worker, options: options)
+            return self.has(file: file.path, on: worker, options: options)
                 .flatMap { has -> Future<()> in
                     guard !has else {
-                        throw FilesystemError.alreadyExists
+                        throw FilesystemError.alreadyExists(file.path)
                     }
                     
                     return try self.client.put(file: upload, on: worker)
@@ -21,14 +21,14 @@ extension S3Adapter: FilesystemWriting, FileOverwriteSupporting {
     }
     
     public func update(data: Data, to: String, on worker: Container, options: FileOptions) -> EventLoopFuture<()> {
-        return run(path: to, on: worker) {
+        return run(path: to, on: worker) { file in
             let s3Options = try options.s3()
-            let upload = try self.fileUpload(data: data, to: $0, options: s3Options)
+            let upload = try self.fileUpload(data: data, to: file, options: s3Options)
             
-            return self.has(file: $0.path, on: worker, options: options)
+            return self.has(file: file.path, on: worker, options: options)
                 .flatMap { has -> Future<()> in
                     guard has else {
-                        throw FilesystemError.notFound
+                        throw FilesystemError.notFound(file.path)
                     }
                     
                     return try self.client.put(file: upload, on: worker)

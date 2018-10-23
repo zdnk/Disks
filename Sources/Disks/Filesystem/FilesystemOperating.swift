@@ -7,7 +7,7 @@ public protocol FilesystemOperating {
     func read(file: String, options: FileOptionsConvertible?) -> Future<Data>
     func listContents(of: String, recursive: Bool, options: FileOptionsConvertible?) -> Future<[String]>
     func metadata(of: String, options: FileOptionsConvertible?) -> Future<FileMetadata>
-    func size(of: String, options: FileOptionsConvertible?) -> Future<Int>
+    func size(of: String, options: FileOptionsConvertible?) -> Future<Int?>
     func write(data: Data, to: String, options: FileOptionsConvertible?) -> Future<()>
     //    func write(file: String, to: String) -> Future<()>
     func update(data: Data, to: String, options: FileOptionsConvertible?) -> Future<()>
@@ -45,7 +45,7 @@ extension FilesystemOperating {
         return metadata(of: of, options: nil)
     }
     
-    func size(of: String) -> Future<Int> {
+    func size(of: String) -> Future<Int?> {
         return size(of: of, options: nil)
     }
     

@@ -25,11 +25,10 @@ extension S3Adapter: FilesystemReading {
         }
     }
     
-    public func size(of file: String, on worker: Container, options: FileOptions) -> EventLoopFuture<Int> {
+    public func size(of file: String, on worker: Container, options: FileOptions) -> EventLoopFuture<Int?> {
         return run(path: file, on: worker) {
             return try self.client.get(fileInfo: $0, on: worker)
                 .map { $0.size }
-                .unwrap(or: FilesystemError.fileSizeNotAvailable)
         }
     }
     

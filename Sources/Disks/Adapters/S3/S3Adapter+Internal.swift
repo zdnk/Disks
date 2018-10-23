@@ -9,7 +9,7 @@ extension S3Adapter {
         }
         
         if response.http.status == .notFound {
-            return FilesystemError.notFound
+            return FilesystemError.notFound(path)
         }
         
         return error

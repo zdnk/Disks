@@ -73,11 +73,7 @@ fileprivate class DummyAdapter: FilesystemAdapting {
         fatalError()
     }
     
-    func size(of: String, on: Container, options: FileOptions) -> EventLoopFuture<Int> {
-        fatalError()
-    }
-    
-    func timestamp(of: String, on: Container, options: FileOptions) -> EventLoopFuture<Date> {
+    func size(of: String, on: Container, options: FileOptions) -> EventLoopFuture<Int?> {
         fatalError()
     }
     
