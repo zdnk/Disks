@@ -52,7 +52,7 @@ fileprivate extension  DiskIdentifier {
     
 }
 
-fileprivate class DummyAdapter: FilesystemAdapter {
+fileprivate class DummyAdapter: FilesystemAdapting {
     
     var calledHas = false
     

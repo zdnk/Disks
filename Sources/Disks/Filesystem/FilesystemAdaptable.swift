@@ -2,6 +2,6 @@ import Foundation
 
 public protocol FilesystemAdaptable {
     
-    var adapter: FilesystemAdapter { get }
+    var adapter: FilesystemAdapting { get }
     
 }

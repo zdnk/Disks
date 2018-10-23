@@ -31,7 +31,7 @@ public protocol FilesystemWriting {
     
 }
 
-public typealias FilesystemAdapter = FilesystemReading & FilesystemWriting
+public typealias FilesystemAdapting = FilesystemReading & FilesystemWriting
 
 
 extension FilesystemReading {

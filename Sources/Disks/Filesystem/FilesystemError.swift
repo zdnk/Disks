@@ -17,6 +17,6 @@ public enum FilesystemError: Swift.Error {
     case noFileOverrideSupport
     case rootViolation
     
-    case listingUnsupported(by: FilesystemAdapter)
+    case listingUnsupported(by: FilesystemAdapting)
     
 }

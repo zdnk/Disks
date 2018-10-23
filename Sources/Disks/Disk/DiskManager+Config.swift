@@ -4,7 +4,7 @@ extension DiskManager {
     
     public struct Config {
         
-        public typealias DiskMap = [DiskIdentifier: FilesystemAdapter]
+        public typealias DiskMap = [DiskIdentifier: FilesystemAdapting]
         
         public let diskMap: DiskMap
         public let `default`: DiskIdentifier
