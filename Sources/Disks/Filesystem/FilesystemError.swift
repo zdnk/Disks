@@ -8,7 +8,6 @@ public enum FilesystemError: Swift.Error {
     case creationFailed(String)
     
     case fileOverrideUnsupported(by: FilesystemAdapting)
-    
     case listingUnsupported(by: FilesystemAdapting)
     
 }
