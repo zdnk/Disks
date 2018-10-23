@@ -1,9 +1,5 @@
 import Foundation
 
-public enum MediaTypeError: Swift.Error {
-    case unresolvable(String)
-}
-
 public enum FilesystemError: Swift.Error {
     
     case notFound(String)
