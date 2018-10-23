@@ -3,6 +3,10 @@ import Vapor
 
 extension LocalAdapter: FilesystemWriting {
 
+    public var supportsOverwrite: Bool {
+        return true
+    }
+    
     public func write(data: Data, to file: String, on worker: Container, options: FileOptions) -> EventLoopFuture<()> {
         return run(on: worker) {
             let path = try self.absolutePath(to: file)

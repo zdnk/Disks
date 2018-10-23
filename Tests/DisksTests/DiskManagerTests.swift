@@ -56,6 +56,10 @@ fileprivate class DummyAdapter: FilesystemAdapting {
     
     var calledHas = false
     
+    var supportsOverwrite: Bool {
+        return true
+    }
+    
     func has(file: String, on: Container, options: FileOptions) -> EventLoopFuture<Bool> {
         calledHas = true
         return on.eventLoop.newSucceededFuture(result: false)

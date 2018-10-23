@@ -34,6 +34,10 @@ extension NullAdapter: FilesystemReading {
 
 extension NullAdapter: FilesystemWriting {
     
+    public var supportsOverwrite: Bool {
+        return true
+    }
+    
     public func write(data: Data, to: String, on worker: Container, options: FileOptions) -> EventLoopFuture<()> {
         #warning("TODO: return the passed data")
         return worker.eventLoop.newSucceededFuture(result: ())

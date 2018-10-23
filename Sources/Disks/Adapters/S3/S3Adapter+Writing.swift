@@ -1,7 +1,11 @@
 import Foundation
 import Vapor
 
-extension S3Adapter: FilesystemWriting, FileOverwriteSupporting {
+extension S3Adapter: FilesystemWriting {
+    
+    public var supportsOverwrite: Bool {
+        return true
+    }
     
     public func write(data: Data, to: String, on worker: Container, options: FileOptions) -> EventLoopFuture<()> {
         return run(path: to, on: worker) { file in

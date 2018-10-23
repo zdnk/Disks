@@ -34,7 +34,7 @@ public extension Filesystem {
                     .and(result: path)
             }.flatMap { (exists, path) in
                 if exists {
-                    if self.adapter is FileOverwriteSupporting {
+                    if self.adapter.supportsOverwrite {
                         return try self.adapter.update(
                             data: data,
                             to: path,
